@@ -1,0 +1,414 @@
+==================================================
+CPL Study System — Change Log
+==================================================
+--------------------------------------------------
+
+Version 14.0.0 — CSV Architecture Stabilization
+--------------------------------------------------
+
+Release Date:
+2026-04-22
+
+Summary:
+
+This version introduces a structural redesign of
+the CSV logging architecture by removing free-form
+notes from CSV storage and relocating them exclusively
+to the TXT logfile. This resolves long-standing data
+integrity risks caused by comma-separated notes and
+establishes a stable, maintainable logging model.
+
+This release represents a major architectural milestone
+and marks the transition from mixed-format logging to
+clean structured data storage.
+
+Key Improvements:
+
+- Removed Notes field from CSV structure
+- Established TXT logfile as exclusive notes repository
+- Standardized CSV to numeric-only session metadata
+- Rebuilt historical CSV data from authoritative TXT logs
+- Unified subject naming consistency across legacy data
+- Stabilized totals calculation reliability
+- Eliminated CSV corruption risk from free-form text
+- Introduced clean 12-column CSV schema
+- Improved long-term maintainability and data safety
+
+Architecture Impact:
+
+High — foundational data model stabilization.
+
+Operational Status:
+
+Major stabilization release — new production baseline.
+--------------------------------------------------
+
+Version 13.6.2 — Totals Engine Restoration & Review Control
+-----------------------------------------------------------
+
+Release Date:
+2026-04-20
+
+Summary:
+
+This version restores the proven totals
+calculation engine from Version 12.5.1
+and introduces controlled review-phase
+interaction features.
+
+Key Improvements:
+
+- Restored subject total calculations
+- Restored overall total calculations
+- Reinstated stable time-format logic (xh ym)
+- Added numeric countdown before timed phases
+- Added Review controls:
+  q → quit review early
+  e → extend review by +10 minutes
+- Restored nano line numbering (-l)
+- Preserved CSV compatibility with mixed-format history
+- Stabilized session arithmetic continuity
+
+Operational Status:
+
+Stabilization release — candidate production baseline.
+
+
+--------------------------------------------------
+
+Version 13.6.1 — Logging Repair & UX Restoration
+------------------------------------------------
+
+Release Date:
+2026-04-20
+
+Summary:
+
+This version restores TXT logfile integrity,
+reintroduces original nano usability behavior,
+and corrects rounding and logging defects
+identified during live testing.
+
+Key Improvements:
+
+- Restored TXT logfile writing stability
+- Reintroduced Mode metadata into TXT entries
+- Corrected exam-time rounding behavior
+- Restored original nano launch instructions
+- Fixed early-timer visual artifacts
+- Maintained compatibility with historical CSV data
+
+Operational Status:
+
+Corrective release — transitional stability.
+
+
+
+--------------------------------------------------
+
+Version 13.6.0 — Metadata Logging & Accurate Timing
+---------------------------------------------------
+
+Release Date:
+2026-04-20
+
+Summary:
+
+This version introduces extended session metadata
+logging and ensures session totals use actual
+exam duration rather than maximum allocated time.
+
+Key Improvements:
+
+- Added logging of session mode
+- Added logging of question count
+- Added logging of maximum exam time
+- Added logging of actual exam time
+- Ensured totals use actual exam time only
+- Preserved nano Notes editor behavior
+- Maintained progress-bar timer visualization
+- Maintained backward compatibility with existing logs
+
+Operational Status:
+
+Stable — Pending validation during real study sessions.
+
+
+
+--------------------------------------------------
+
+Version 13.5.0 — Interruptible Exam Timer
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Introduced interruptible exam functionality,
+allowing early completion during timed exams.
+
+Key Improvements:
+
+- Added 'q' key support to finish exam early
+- Recorded actual exam time used
+- Maintained visual progress-bar timer
+- Preserved workflow stability across all modes
+
+Operational Status:
+
+Stable functional upgrade.
+
+
+
+--------------------------------------------------
+
+Version 13.4.0 — Endurance Mode Implementation
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Introduced dedicated Endurance Session mode
+for extended exam simulation workflows.
+
+Key Improvements:
+
+- Added Endurance Session mode
+- Implemented extended review phase
+- Enabled dynamic exam configuration
+- Preserved compatibility with existing workflow
+
+Operational Status:
+
+Stable mode expansion.
+
+
+
+--------------------------------------------------
+
+Version 13.3.0 — Momentum Mode Separation
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Introduced Momentum Session mode
+for short reinforcement exam workflows.
+
+Key Improvements:
+
+- Added Momentum Session mode
+- Implemented short review phase
+- Enabled fast-session capability
+- Preserved timer and logging stability
+
+Operational Status:
+
+Stable feature expansion.
+
+
+
+--------------------------------------------------
+
+Version 13.2.0 — Dynamic Question Timing
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Introduced dynamic exam duration calculation
+based on configurable question count.
+
+Key Improvements:
+
+- Added configurable question input
+- Implemented time-per-question calculation
+- Enabled variable-length exam simulation
+
+Operational Status:
+
+Stable timing enhancement.
+
+
+
+--------------------------------------------------
+
+Version 13.1.0 — Mode Execution Branching
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Implemented structured branching logic
+for multi-mode session execution.
+
+Key Improvements:
+
+- Added execution routing per session mode
+- Stabilized workflow transitions
+- Maintained compatibility with existing features
+
+Operational Status:
+
+Stable internal architecture update.
+
+
+
+--------------------------------------------------
+
+Version 13.0.0 — Multi-Mode Session Engine
+---------------------------------------------------
+
+Release Date:
+2026-04-19
+
+Summary:
+
+Introduced structured session mode
+selection replacing the previous
+linear workflow design.
+
+Key Improvements:
+
+- Added session mode selection menu
+- Introduced Full Session workflow
+- Introduced Foundation Session workflow
+- Established mode-driven execution framework
+
+Operational Status:
+
+Major architecture upgrade.
+
+
+
+==================================================
+PREVIOUS STABLE RELEASES
+==================================================
+
+
+Version 12.5.1 — Indented Notes Restoration
+---------------------------------------------
+
+Release Date:
+2026-04-18
+
+Summary:
+
+This version restores visual indentation of notes inside
+the TXT logfile while preserving multi-line formatting
+introduced in Version 12.5.
+
+Key Improvements:
+
+- Restored structured indentation for Notes section
+- Preserved original multi-line formatting from nano
+- Increased nano launch delay (3 → 5 seconds)
+- Added improved spatial awareness inside nano editor
+- Enabled clearer separation between notes and totals
+- Maintained CSV safety and numeric integrity
+- Preserved existing subject selection system
+- Maintained full backward compatibility
+
+Usability Impact:
+
+This update significantly improves readability of
+structured study notes, allowing aligned lists and
+logical spacing to remain visually intact.
+
+Operational Status:
+
+Stable usability refinement release.
+
+
+
+--------------------------------------------------
+
+Version 12.4 — Nano Notes & Top-Entry Logging
+---------------------------------------------------
+
+Release Date:
+2026-04-17
+
+Key Features:
+
+- Integrated multi-line Notes Editor using nano
+- Added user guidance before editor launch:
+  ("Ctrl+O to save, Ctrl+X to exit")
+- Improved usability for detailed session reflection
+- Implemented newest-first logging in TXT file
+- Eliminated scrolling requirement to view latest session
+- Preserved CSV compatibility with safe newline handling
+- Maintained backward compatibility with existing logs
+
+Structural Changes:
+
+- TXT log writing method changed from append to prepend
+- Introduced temporary entry handling for safe log insertion
+- Updated script header with version tracking metadata
+
+Operational Status:
+
+Stable production version.
+
+
+
+--------------------------------------------------
+
+Installer Package — Version 1.1
+---------------------------------------------------
+
+Release Date:
+2026-04-17
+
+Key Features:
+
+- Created first distributable CPL Study System package
+- Added cross-platform installer (Linux + macOS compatible)
+- Automatic OS detection using uname
+- Automatic shell configuration detection:
+  Linux → ~/.bashrc or ~/.alias
+  macOS → ~/.zshrc
+- Automatic directory creation during installation
+- Automatic creation of log files
+- Alias creation handled automatically
+- nano availability check added
+
+Purpose:
+
+Enable external testing and simplified installation
+on new machines.
+
+Operational Status:
+
+First external testing release.
+
+
+
+==================================================
+Future Versions (Conceptual)
+==================================================
+
+Version 14.0 — Subject Configuration System
+
+Planned Features:
+
+- subjects.cfg file
+- Active subject filtering
+- Passed subject marking
+- Optional hiding of completed subjects
+- Visual progress indicators
+
+Architecture Impact:
+
+High — structural redesign.
+
+==================================================
