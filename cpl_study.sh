@@ -17,7 +17,7 @@ mkdir -p "$LOGDIR"
 ########################################
 
 if [ ! -f "$LOGCSV" ]; then
-echo "session,subject_session,date,subject,score,confidence,mock_passed,notes,session_minutes" >> "$LOGCSV"
+echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,notes,session_minutes" >> "$LOGCSV"
 fi
 
 ########################################
@@ -428,8 +428,8 @@ TOTAL_REMAIN=$((NEW_TOTAL % 60))
 SUBJECT_HOURS=$((NEW_SUBJECT_TOTAL / 60))
 SUBJECT_REMAIN=$((NEW_SUBJECT_TOTAL % 60))
 
-GLOBAL_FMT=$(printf "%03d" $GLOBAL_SESSION)
-SUBJECT_FMT=$(printf "%03d" $SUBJECT_SESSION)
+GLOBAL_FMT=$(printf "%03d" "$GLOBAL_SESSION")
+SUBJECT_FMT=$(printf "%03d" "$SUBJECT_SESSION")
 
 ########################################
 # CREATE ENTRY (Indented Notes Restored)
@@ -475,7 +475,7 @@ rm -f "$TMP_ENTRY"
 # CSV WRITE
 ########################################
 
-echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$SCORE,$CONF,$MOCK,\"$NOTES_CSV\",$SESSION_MINUTES" >> "$LOGCSV"
+echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,\"$NOTES_CSV\",$SESSION_MINUTES" >> "$LOGCSV"
 
 
 ########################################
