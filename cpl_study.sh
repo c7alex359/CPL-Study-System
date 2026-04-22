@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 13.6.8 — Logging Fully Restored
-# Last Updated: 2026-04-22
+# Version 13.6.6 — UX Harmonization Build
+# Last Updated: 2026-04-21
 # ====================================
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
@@ -17,7 +17,7 @@ mkdir -p "$LOGDIR"
 ########################################
 
 if [ ! -f "$LOGCSV" ]; then
-echo "session,subject_session,date,subject,mode,questions,exam_time,actual_exam_time,score,confidence,mock_passed,notes,session_minutes" >> "$LOGCSV"
+echo "session,subject_session,date,subject,score,confidence,mock_passed,notes,session_minutes" >> "$LOGCSV"
 fi
 
 ########################################
@@ -39,6 +39,8 @@ REVIEW_ENDURANCE_MIN=20
 
 EXTEND_MIN=5
 BAR_WIDTH=30
+
+########################################
 
 clear
 
@@ -100,7 +102,7 @@ echo "Selected Mode: $MODE_NAME"
 echo
 
 ########################################
-# QUESTIONS
+# QUESTION INPUT
 ########################################
 
 if [ "$MODE_NAME" != "foundation" ]; then
@@ -128,18 +130,257 @@ EXAM_MIN=0
 fi
 
 ########################################
-# (Timers unchanged — omitted here for space clarity in explanation)
-# They remain exactly as in your v13.6.7
+# TIMER FUNCTION
 ########################################
 
-# --- KEEP YOUR EXISTING TIMER FUNCTIONS HERE ---
-# (No changes to run_timer or run_exam_timer)
+run_timer() {
+
+MINUTES=$1
+PHASE=$2
+
+TOTAL_SECONDS=$((MINUTES * 60))
+SECONDS_LEFT=$TOTAL_SECONDS
+
+EXTENDED_MINUTES=0
+
+echo
+echo "$PHASE Phase"
+
+if [[ "$PHASE" == *Review* ]]; then
+echo "Press 'q' to finish early"
+echo "Press 'e' to extend review (+${EXTEND_MIN} min)"
+fi
+
+while [ $SECONDS_LEFT -gt 0 ]; do
+
+read -t 1 -n 1 -s KEY
+
+if [[ "$PHASE" == *Review* ]]; then
+
+if [ "$KEY" = "q" ]; then
+echo
+echo "Review finished early."
+break
+fi
+
+if [ "$KEY" = "e" ]; then
+
+SECONDS_LEFT=$((SECONDS_LEFT + EXTEND_MIN*60))
+TOTAL_SECONDS=$((TOTAL_SECONDS + EXTEND_MIN*60))
+
+EXTENDED_MINUTES=$((EXTENDED_MINUTES + EXTEND_MIN))
+
+echo
+echo "+${EXTEND_MIN} minutes added."
+
+fi
+
+fi
+
+ELAPSED=$((TOTAL_SECONDS - SECONDS_LEFT))
+
+FILLED=$((ELAPSED * BAR_WIDTH / TOTAL_SECONDS))
+EMPTY=$((BAR_WIDTH - FILLED))
+
+BAR=$(printf "%${FILLED}s" | tr ' ' '-')
+SPACE=$(printf "%${EMPTY}s")
+
+ELAPSED_MIN=$((ELAPSED / 60))
+ELAPSED_SEC=$((ELAPSED % 60))
+
+REMAIN_MIN=$((SECONDS_LEFT / 60))
+REMAIN_SEC=$((SECONDS_LEFT % 60))
+
+printf "\r[%-30s] %02d:%02d elapsed | %02d:%02d remaining" \
+"$BAR$SPACE" \
+$ELAPSED_MIN $ELAPSED_SEC \
+$REMAIN_MIN $REMAIN_SEC
+
+SECONDS_LEFT=$((SECONDS_LEFT - 1))
+
+done
+
+echo
+echo "$PHASE completed."
+echo
+
+RETURN_EXTENDED=$EXTENDED_MINUTES
+
+read -p "Press ENTER to continue..."
+
+}
 
 ########################################
-# SESSION COUNTS (RESTORED)
+# EXAM TIMER
 ########################################
+
+run_exam_timer() {
+
+TOTAL_SECONDS=$((EXAM_MIN * 60))
+SECONDS_LEFT=$TOTAL_SECONDS
+
+START_TIME=$(date +%s)
+
+echo
+echo "Exam Mode Phase"
+echo "Press 'q' to finish early."
+
+while [ $SECONDS_LEFT -gt 0 ]; do
+
+read -t 1 -n 1 -s KEY
+
+if [ "$KEY" = "q" ]; then
+echo
+echo "Exam finished early."
+break
+fi
+
+ELAPSED=$((TOTAL_SECONDS - SECONDS_LEFT))
+
+FILLED=$((ELAPSED * BAR_WIDTH / TOTAL_SECONDS))
+EMPTY=$((BAR_WIDTH - FILLED))
+
+BAR=$(printf "%${FILLED}s" | tr ' ' '-')
+SPACE=$(printf "%${EMPTY}s")
+
+ELAPSED_MIN=$((ELAPSED / 60))
+ELAPSED_SEC=$((ELAPSED % 60))
+
+REMAIN_MIN=$((SECONDS_LEFT / 60))
+REMAIN_SEC=$((SECONDS_LEFT % 60))
+
+printf "\r[%-30s] %02d:%02d elapsed | %02d:%02d remaining" \
+"$BAR$SPACE" \
+$ELAPSED_MIN $ELAPSED_SEC \
+$REMAIN_MIN $REMAIN_SEC
+
+SECONDS_LEFT=$((SECONDS_LEFT - 1))
+
+done
+
+END_TIME=$(date +%s)
+
+ELAPSED_SECONDS=$((END_TIME - START_TIME))
+
+EXAM_ACTUAL_MIN=$(( (ELAPSED_SECONDS + 29) / 60 ))
+
+echo
+echo "Actual Exam Time Used: $EXAM_ACTUAL_MIN minutes"
+
+read -p "Press ENTER to continue..."
+
+}
+
+########################################
+# RUN MODES
+########################################
+
+if [ "$MODE_NAME" = "foundation" ] || \
+   [ "$MODE_NAME" = "full" ]; then
+
+run_timer $WARMUP_MIN "Warm-up"
+run_timer $TARGET_MIN "Target Study"
+
+fi
+
+if [ "$MODE_NAME" != "foundation" ]; then
+run_exam_timer
+else
+EXAM_ACTUAL_MIN=0
+fi
+
+########################################
+# REVIEW
+########################################
+
+if [ "$MODE_NAME" = "momentum" ]; then
+
+run_timer $REVIEW_SHORT_MIN "Quick Review"
+REVIEW_EXTENDED=$RETURN_EXTENDED
+
+SESSION_MINUTES=$((EXAM_ACTUAL_MIN + REVIEW_SHORT_MIN + REVIEW_EXTENDED))
+
+elif [ "$MODE_NAME" = "endurance" ]; then
+
+run_timer $REVIEW_ENDURANCE_MIN "Endurance Review"
+REVIEW_EXTENDED=$RETURN_EXTENDED
+
+SESSION_MINUTES=$((EXAM_ACTUAL_MIN + REVIEW_ENDURANCE_MIN + REVIEW_EXTENDED))
+
+elif [ "$MODE_NAME" = "full" ]; then
+
+run_timer $REVIEW_MIN "Error Review"
+REVIEW_EXTENDED=$RETURN_EXTENDED
+
+SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + EXAM_ACTUAL_MIN + REVIEW_MIN + REVIEW_EXTENDED))
+
+else
+
+run_timer $REVIEW_MIN "Error Review"
+REVIEW_EXTENDED=$RETURN_EXTENDED
+
+SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + REVIEW_MIN + REVIEW_EXTENDED))
+
+fi
+
+########################################
+# PERFORMANCE
+########################################
+
+echo
+echo "===================================="
+echo "      SESSION PERFORMANCE"
+echo "===================================="
+
+if [ "$MODE_NAME" = "foundation" ]; then
+
+SCORE="N/A"
+CONF="study-only"
+MOCK="n"
+
+else
+
+read -p "Enter Exam Score (%): " SCORE
+read -p "Confidence Level (low/medium/high): " CONF
+read -p "Mock exam passed? (y/n): " MOCK
+
+fi
+
+########################################
+# NOTES (Restored v12.5.1 Instructions)
+########################################
+
+TMP_NOTES="/tmp/cpl_notes_$$.txt"
+
+echo
+echo "Opening notes editor..."
+echo
+echo "Use:"
+echo "CTRL + O → Save notes"
+echo "CTRL + X → Exit editor"
+echo
+echo "Keep notes concise and structured."
+echo "Short bullet-style entries recommended."
+echo
+
+for i in 5 4 3 2 1; do
+printf "\rStarting in: %s " "$i"
+sleep 1
+done
+echo
+
+nano -c -r 100 -l "$TMP_NOTES"
+
+NOTES_TXT=$(cat "$TMP_NOTES")
+NOTES_CSV=$(cat "$TMP_NOTES" | tr '\n' ' ')
+
+rm -f "$TMP_NOTES"
 
 DATE=$(date "+%Y-%m-%d")
+
+########################################
+# SESSION COUNTS
+########################################
 
 GLOBAL_SESSION=$(awk -F',' '
 NR>1 {count++}
@@ -152,7 +393,7 @@ END {print count+1}
 ' "$LOGCSV")
 
 ########################################
-# TOTALS (already working — kept)
+# TOTALS
 ########################################
 
 TOTAL_MINUTES=$(awk -F',' '
@@ -174,6 +415,10 @@ END {print sum}
 NEW_TOTAL=$((TOTAL_MINUTES + SESSION_MINUTES))
 NEW_SUBJECT_TOTAL=$((SUBJECT_TOTAL_MINUTES + SESSION_MINUTES))
 
+########################################
+# FORMAT TIMES
+########################################
+
 SESSION_HOURS=$((SESSION_MINUTES / 60))
 SESSION_REMAIN=$((SESSION_MINUTES % 60))
 
@@ -183,8 +428,11 @@ TOTAL_REMAIN=$((NEW_TOTAL % 60))
 SUBJECT_HOURS=$((NEW_SUBJECT_TOTAL / 60))
 SUBJECT_REMAIN=$((NEW_SUBJECT_TOTAL % 60))
 
+GLOBAL_FMT=$(printf "%03d" $GLOBAL_SESSION)
+SUBJECT_FMT=$(printf "%03d" $SUBJECT_SESSION)
+
 ########################################
-# TXT ENTRY CREATION (RESTORED)
+# CREATE ENTRY (Indented Notes Restored)
 ########################################
 
 TMP_ENTRY="/tmp/cpl_entry_$$.txt"
@@ -192,11 +440,10 @@ TMP_ENTRY="/tmp/cpl_entry_$$.txt"
 {
 echo
 echo "===================================="
-echo "Session #: $(printf "%03d" $GLOBAL_SESSION)"
-echo "Subject Session #: $(printf "%03d" $SUBJECT_SESSION)"
+echo "Session #: $GLOBAL_FMT"
+echo "Subject Session #: $SUBJECT_FMT"
 echo "Date: $DATE"
 echo "Subject: $SUBJECT"
-echo "Mode: $MODE_NAME"
 echo
 
 echo "Score: $SCORE"
@@ -225,13 +472,14 @@ fi
 rm -f "$TMP_ENTRY"
 
 ########################################
-# CSV WRITE (RESTORED)
+# CSV WRITE
 ########################################
 
-echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,\"$NOTES_CSV\",$SESSION_MINUTES" >> "$LOGCSV"
+echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$SCORE,$CONF,$MOCK,\"$NOTES_CSV\",$SESSION_MINUTES" >> "$LOGCSV"
+
 
 ########################################
-# FINAL SUMMARY
+# FINAL SUMMARY (Restored UX)
 ########################################
 
 echo
@@ -239,10 +487,14 @@ echo "===================================="
 echo "SESSION COMPLETED"
 echo "===================================="
 
+SESSION_HOURS=$((SESSION_MINUTES / 60))
+SESSION_REMAIN=$((SESSION_MINUTES % 60))
+
 echo
 echo "Session Time: ${SESSION_HOURS}h ${SESSION_REMAIN}m"
 echo "Subject Total Time: ${SUBJECT_HOURS}h ${SUBJECT_REMAIN}m"
 echo "Overall Total Time: ${TOTAL_HOURS}h ${TOTAL_REMAIN}m"
+echo
 
 echo
 echo "Log updated successfully."
