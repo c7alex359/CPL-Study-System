@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 13.6.6 — UX Harmonization Build
+# Version 13.6.9 — Taking manual control of my script
 # Last Updated: 2026-04-21
 # ====================================
 
@@ -444,8 +444,14 @@ echo "Session #: $GLOBAL_FMT"
 echo "Subject Session #: $SUBJECT_FMT"
 echo "Date: $DATE"
 echo "Subject: $SUBJECT"
-echo
 
+if [ "$EXAM_ACTUAL_MIN" -gt 0 ]; then
+echo "Mode: $MODE_NAME"
+echo "Questions: $QUESTIONS"
+echo "Exam Time Used: $EXAM_ACTUAL_MIN minutes"
+fi
+
+echo
 echo "Score: $SCORE"
 echo "Confidence: $CONF"
 echo "Mock Passed: $MOCK"
