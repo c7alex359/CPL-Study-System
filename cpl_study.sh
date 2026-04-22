@@ -2,8 +2,9 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 13.6.9 — Taking manual control of my script
-# Last Updated: 2026-04-21
+# Version 14.0.0 — — CSV Stabilization Architecture
+# Notes removed from CSV (TXT-only notes)
+# Last Updated: 2026-04-22
 # ====================================
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
@@ -17,7 +18,7 @@ mkdir -p "$LOGDIR"
 ########################################
 
 if [ ! -f "$LOGCSV" ]; then
-echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,notes,session_minutes" >> "$LOGCSV"
+echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes" >> "$LOGCSV"
 fi
 
 ########################################
@@ -481,7 +482,7 @@ rm -f "$TMP_ENTRY"
 # CSV WRITE
 ########################################
 
-echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,\"$NOTES_CSV\",$SESSION_MINUTES" >> "$LOGCSV"
+echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,$SESSION_MINUTES" >> "$LOGCSV"
 
 
 ########################################
