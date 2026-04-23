@@ -2,9 +2,9 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.0.0 — — CSV Stabilization Architecture
-# Notes removed from CSV (TXT-only notes)
-# Last Updated: 2026-04-22
+# Version 14.0.1 — — Study Mode UX refinement
+# 
+# Last Updated: 2026-04-23
 # ====================================
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
@@ -147,6 +147,10 @@ EXTENDED_MINUTES=0
 echo
 echo "$PHASE Phase"
 
+if [[ "$PHASE" == "Target Study" ]]; then
+echo "Press 'p' to pause"
+fi
+
 if [[ "$PHASE" == *Review* ]]; then
 echo "Press 'q' to finish early"
 echo "Press 'e' to extend review (+${EXTEND_MIN} min)"
@@ -155,6 +159,25 @@ fi
 while [ $SECONDS_LEFT -gt 0 ]; do
 
 read -t 1 -n 1 -s KEY
+
+# Pause support ONLY for Target Study
+if [[ "$PHASE" == "Target Study" ]]; then
+
+if [ "$KEY" = "p" ]; then
+
+echo
+echo "Paused. Press 'r' to resume."
+
+while true; do
+read -n 1 -s KEY
+[ "$KEY" = "r" ] && break
+done
+
+echo "Resuming..."
+
+fi
+
+fi
 
 if [[ "$PHASE" == *Review* ]]; then
 
@@ -317,7 +340,7 @@ SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + EXAM_ACTUAL_MIN + REVIEW_MIN + REVI
 
 else
 
-run_timer $REVIEW_MIN "Error Review"
+run_timer $REVIEW_MIN "Review New Insights"
 REVIEW_EXTENDED=$RETURN_EXTENDED
 
 SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + REVIEW_MIN + REVIEW_EXTENDED))
@@ -330,7 +353,13 @@ fi
 
 echo
 echo "===================================="
+
+if [ "$MODE_NAME" = "foundation" ]; then
+echo "         SESSION NOTES"
+else
 echo "      SESSION PERFORMANCE"
+fi
+
 echo "===================================="
 
 if [ "$MODE_NAME" = "foundation" ]; then
