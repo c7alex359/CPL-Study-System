@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.0.1 — — Study Mode UX refinement
+# Version 14.1.0 — — Subject Expansion
 # 
 # Last Updated: 2026-04-23
 # ====================================
@@ -62,7 +62,10 @@ echo "4) Communications"
 echo "5) Air Law"
 
 echo
-read -p "Enter number: " SUBJECT_NUM
+echo "0) Show Additional Subjects"
+
+echo
+read -r -p "Enter number: " SUBJECT_NUM
 
 case $SUBJECT_NUM in
 1) SUBJECT="Meteorology" ;;
@@ -70,7 +73,54 @@ case $SUBJECT_NUM in
 3) SUBJECT="General Navigation" ;;
 4) SUBJECT="Communications" ;;
 5) SUBJECT="Air Law" ;;
+
+0)
+
+echo
+echo "Additional Subjects:"
+echo
+echo "6) Principles of Flight"
+echo "7) Instrumentation"
+echo "8) Radio Navigation"
+echo "9) Airframe, Systems, Electrics, Power Plant"
+echo "10) Operational Procedures"
+echo "11) Mass & Balance"
+echo "12) Performance"
+echo "13) Flight Planning & Monitoring"
+echo "14) Knowledge, Skills and Attitudes (KSA)"
+
+echo
+echo "0) Back to Main Subjects"
+
+echo
+read -r -p "Enter number: " SUBJECT_NUM
+
+case $SUBJECT_NUM in
+
+0)
+echo
+echo "Returning to main subject list..."
+echo
+exec "$0"
+;;
+
+6) SUBJECT="Principles of Flight" ;;
+7) SUBJECT="Instrumentation" ;;
+8) SUBJECT="Radio Navigation" ;;
+9) SUBJECT="Airframe, Systems, Electrics, Power Plant" ;;
+10) SUBJECT="Operational Procedures" ;;
+11) SUBJECT="Mass & Balance" ;;
+12) SUBJECT="Performance" ;;
+13) SUBJECT="Flight Planning & Monitoring" ;;
+14) SUBJECT="Knowledge, Skills and Attitudes (KSA)" ;;
 *) SUBJECT="Unknown" ;;
+
+esac
+
+;;
+
+*) SUBJECT="Unknown" ;;
+
 esac
 
 echo
