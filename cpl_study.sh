@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.1.0 — — Subject Expansion
-# 
+# Version 14.1.1 — — Subject Expansion
+# bug fix (back to main menu)
 # Last Updated: 2026-04-23
 # ====================================
 
@@ -99,8 +99,8 @@ case $SUBJECT_NUM in
 
 0)
 echo
-echo "Returning to main subject list..."
-echo
+echo "Returning to main subjects..."
+sleep 1
 exec "$0"
 ;;
 
@@ -113,7 +113,13 @@ exec "$0"
 12) SUBJECT="Performance" ;;
 13) SUBJECT="Flight Planning & Monitoring" ;;
 14) SUBJECT="Knowledge, Skills and Attitudes (KSA)" ;;
-*) SUBJECT="Unknown" ;;
+
+*)
+echo
+echo "Invalid selection."
+sleep 1
+exec "$0"
+;;
 
 esac
 
