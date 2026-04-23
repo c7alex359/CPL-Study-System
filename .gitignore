@@ -1,0 +1,20 @@
+# Logs
+logs/
+
+# Backups
+Evolution/
+
+# Old versions
+*.save
+*.copy
+
+# Images
+*.jpg
+*.png
+
+# Temporary files
+/tmp/
+
+# Editor files
+*~
+*.swp
