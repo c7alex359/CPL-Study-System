@@ -3,6 +3,48 @@ CPL Study System — Change Log
 ==================================================
 --------------------------------------------------
 
+Version 14.0.1 — Study Mode UX Refinement
+--------------------------------------------------
+
+Release Date:
+2026-04-23
+
+Summary:
+
+This version refines Study Mode usability by
+introducing controlled pause capability during
+Target Study phases and improving terminology
+alignment for reflective learning workflows.
+
+These changes improve interruption resilience
+during study sessions while preserving strict
+timing discipline for exam environments.
+
+Key Improvements:
+
+- Added pause functionality:
+  p → pause Target Study phase
+  r → resume Target Study phase
+- Pause limited strictly to Target Study phases
+- Preserved uninterrupted behavior in Exam Mode
+- Renamed Foundation Mode review phase:
+  "Error Review" → "Review New Insights"
+- Renamed Foundation Mode header:
+  "SESSION PERFORMANCE" → "SESSION NOTES"
+- Preserved Full Session terminology consistency
+- Maintained complete compatibility with logging
+  and totals calculation systems
+
+Architecture Impact:
+
+Low — behavioral UX refinement only.
+
+Operational Status:
+
+Stable usability refinement — verified functional.
+
+--------------------------------------------------
+
 Version 14.0.0 — CSV Architecture Stabilization
 --------------------------------------------------
 
