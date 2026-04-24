@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.1.1 — — Subject Expansion
-# bug fix (back to main menu)
+# Version 14.2.0 — — Subject Tree LOGS
+# 
 # Last Updated: 2026-04-23
 # ====================================
 
@@ -465,6 +465,105 @@ rm -f "$TMP_NOTES"
 DATE=$(date "+%Y-%m-%d")
 
 ########################################
+# SUBJECT LOG PATH MAPPING
+########################################
+
+case "$SUBJECT" in
+
+"Meteorology")
+SUBJECT_DIR="$HOME/Documents/CPL/050_Meteorology"
+SUBJECT_CODE="met"
+;;
+
+"Human Performance & Limitations")
+SUBJECT_DIR="$HOME/Documents/CPL/040_Human_Performance_&_Limitations"
+SUBJECT_CODE="human"
+;;
+
+"General Navigation")
+SUBJECT_DIR="$HOME/Documents/CPL/061_General_Navigation"
+SUBJECT_CODE="gnav"
+;;
+
+"Communications")
+SUBJECT_DIR="$HOME/Documents/CPL/090_Communication"
+SUBJECT_CODE="com"
+;;
+
+"Air Law")
+SUBJECT_DIR="$HOME/Documents/CPL/010_Air_Law"
+SUBJECT_CODE="alaw"
+;;
+
+"Principles of Flight")
+SUBJECT_DIR="$HOME/Documents/CPL/081_Principles_of_Flight"
+SUBJECT_CODE="pof"
+;;
+
+"Instrumentation")
+SUBJECT_DIR="$HOME/Documents/CPL/022_Instrumentation"
+SUBJECT_CODE="inst"
+;;
+
+"Radio Navigation")
+SUBJECT_DIR="$HOME/Documents/CPL/062_Radio_Navigation"
+SUBJECT_CODE="rnav"
+;;
+
+"Airframe, Systems, Electrics, Power Plant")
+SUBJECT_DIR="$HOME/Documents/CPL/021_Airframes"
+SUBJECT_CODE="asepp"
+;;
+
+"Operational Procedures")
+SUBJECT_DIR="$HOME/Documents/CPL/070_Operational_Procedures"
+SUBJECT_CODE="ops"
+;;
+
+"Mass & Balance")
+SUBJECT_DIR="$HOME/Documents/CPL/031_Mass_&_Balance"
+SUBJECT_CODE="mb"
+;;
+
+"Performance")
+SUBJECT_DIR="$HOME/Documents/CPL/032_Performance"
+SUBJECT_CODE="perf"
+;;
+
+"Flight Planning & Monitoring")
+SUBJECT_DIR="$HOME/Documents/CPL/033_Flight_Planning_&_Monitoring"
+SUBJECT_CODE="flpm"
+;;
+
+"Knowledge, Skills and Attitudes (KSA)")
+SUBJECT_DIR="$HOME/Documents/CPL/100_KSA"
+SUBJECT_CODE="ksa"
+;;
+
+*)
+SUBJECT_DIR=""
+SUBJECT_CODE="unknown"
+;;
+
+esac
+
+SUBJECT_LOG_TXT="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.txt"
+SUBJECT_LOG_CSV="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.csv"
+
+########################################
+# CREATE SUBJECT CSV IF MISSING
+########################################
+
+if [ -n "$SUBJECT_LOG_CSV" ]; then
+
+if [ ! -f "$SUBJECT_LOG_CSV" ]; then
+
+echo "subject_session,date,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes,subject_total_minutes" >> "$SUBJECT_LOG_CSV"
+
+fi
+
+fi
+########################################
 # SESSION COUNTS
 ########################################
 
@@ -559,6 +658,26 @@ cat "$TMP_ENTRY" "$LOGTXT" > "$LOGTXT.new"
 mv "$LOGTXT.new" "$LOGTXT"
 else
 mv "$TMP_ENTRY" "$LOGTXT"
+fi
+
+########################################
+# WRITE TO SUBJECT TXT LOG
+########################################
+
+if [ -n "$SUBJECT_LOG_TXT" ]; then
+
+if [ -f "$SUBJECT_LOG_TXT" ]; then
+
+# Append (oldest-first chronological)
+cat "$TMP_ENTRY" >> "$SUBJECT_LOG_TXT"
+
+else
+
+# Create new subject log
+cat "$TMP_ENTRY" > "$SUBJECT_LOG_TXT"
+
+fi
+
 fi
 
 rm -f "$TMP_ENTRY"
