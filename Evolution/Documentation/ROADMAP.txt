@@ -3,10 +3,10 @@ CPL Study System — Development Roadmap
 ==================================================
 
 Current Version:
-14.0.0 (CSV Architecture Stabilization)
+14.2.2 (Subject Logging + Focus Mode Stabilization)
 
 Operational Status:
-Production Baseline — Data Model Stabilized
+Production Baseline — Multi-Log System Active
 
 Installer Version:
 1.1 (Cross-Platform Linux/macOS)
@@ -168,6 +168,12 @@ Recent Milestones Achieved:
 ✔ CSV architecture stabilized (v14.0.0)
 ✔ Notes removed from CSV (TXT-only notes model)
 ✔ Historical CSV rebuilt from TXT source
+✔ Subject-level TXT logs implemented
+✔ Subject-level CSV logs implemented
+✔ Historical subject logs rebuilt
+✔ Multi-subject directory logging active
+✔ Focus-mode UI clearing implemented
+✔ Cursor safety trap added (Ctrl+C recovery)
 ----------------------------------------
 
 Sub-Phase 3B — Subject Configuration System
@@ -188,13 +194,34 @@ Expected Outcome:
 
 Dynamic subject management system
 supporting long-term structured progression.
+==================================================
 
+Phase 4 — Subject System Expansion
+
+Status:
+Completed (v14.2.0)
+
+Delivered:
+
+- Multi-level subject selection
+- Full syllabus accessibility
+- Safe navigation recovery behavior
+- Subject-level logging system
+- Subject-specific TXT logs
+- Subject-specific CSV logs
+- Subject log rebuild utilities
+
+Next Candidates:
+
+- Subject priority ordering
+- Optional subject hiding
+- Subject completion tracking
 
 ==================================================
 UPCOMING DEVELOPMENT PHASES
 ==================================================
 
-Phase 4 — Reporting System
+Phase 5 — Reporting System
 --------------------------------
 
 Planned Features:
@@ -214,7 +241,7 @@ and workload distribution.
 
 --------------------------------------------------
 
-Phase 5 — Configuration System
+Phase 6 — Configuration System
 --------------------------------
 
 Planned Features:

@@ -3,6 +3,188 @@ CPL Study System — Change Log
 ==================================================
 --------------------------------------------------
 
+Version 14.2.2 — Focus Mode UI & Cursor Safety
+--------------------------------------------------
+
+Release Date:
+2026-04-24
+
+Summary:
+
+Introduced distraction-free terminal behavior
+during timed phases and added cursor recovery
+safety to prevent terminal corruption after
+unexpected interruption.
+
+Key Improvements:
+
+- Added automatic screen clearing between
+  subject and mode transitions
+
+- Introduced cursor hiding during timers
+  (tput civis)
+
+- Implemented Ctrl+C recovery trap to restore
+  cursor visibility automatically
+
+- Preserved compatibility with all timer and
+  logging systems
+
+Architecture Impact:
+
+Low — UX refinement only.
+
+Operational Status:
+
+Stable — verified during live execution.
+
+--------------------------------------------------
+
+Version 14.2.1 — Secondary Menu Stability Refinement
+--------------------------------------------------
+
+Release Date:
+2026-04-23
+
+Summary:
+
+Refined secondary subject menu return logic
+to prevent unintended subject selection
+when navigating back to primary subjects.
+
+Key Improvements:
+
+- Stabilized return path from additional
+  subject menu
+
+- Eliminated "Selected: Unknown" behavior
+
+- Improved user navigation reliability
+
+Architecture Impact:
+
+Low — control flow correction.
+
+Operational Status:
+
+Stable — verified in live usage.
+
+--------------------------------------------------
+
+Version 14.2.0 — Subject-Level Logging System
+--------------------------------------------------
+
+Release Date:
+2026-04-24
+
+Summary:
+
+Introduced decentralized subject-level logging
+alongside the primary system log. Each subject
+now maintains independent TXT and CSV logs,
+allowing focused subject-specific review and
+structured knowledge consolidation.
+
+Key Improvements:
+
+- Added subject-specific TXT logs
+  stored inside subject directories
+
+- Added subject-specific CSV logs
+  tracking subject session progression
+
+- Implemented automatic subject log
+  creation if missing
+
+- Added rebuild utilities to generate
+  subject logs from historical master logs
+
+- Preserved centralized master logging
+  architecture
+
+Architecture Impact:
+
+High — multi-log system expansion.
+
+Operational Status:
+
+Major workflow milestone — verified functional.
+
+--------------------------------------------------
+
+Version 14.1.1 — Secondary Menu Return Fix
+--------------------------------------------------
+
+Release Date:
+2026-04-23
+
+Summary:
+
+Resolved navigation issue in secondary
+subject menu where entering "0" to return
+to the main subject list resulted in
+"Selected: Unknown".
+
+Key Improvements:
+
+- Implemented controlled script restart
+  when exiting secondary subject menu
+- Improved user navigation reliability
+- Prevented unintended subject selection
+  during menu return
+
+Architecture Impact:
+
+Minor — control flow stability improvement.
+
+Operational Status:
+
+Stable — verified through live testing.
+--------------------------------------------------
+
+Version 14.1.0 — Expandable Subject Interface
+--------------------------------------------------
+
+Release Date:
+2026-04-23
+
+Summary:
+
+Introduced expandable subject menu enabling
+full 14-subject syllabus support while
+preserving clean primary subject focus.
+
+Added safe return capability from secondary
+subject menu to prevent accidental selection
+errors and improve usability during real
+study sessions.
+
+Key Improvements:
+
+- Added secondary subject expansion menu
+  (0 → Show Additional Subjects)
+
+- Implemented full subject set (6–14)
+
+- Added "Back to Main Subjects" navigation
+  with controlled script restart behavior
+
+- Improved user flow reliability during
+  subject selection
+
+- Maintained compatibility with logging,
+  session counting, and totals system
+
+Architecture Impact:
+
+Moderate — interface scalability achieved.
+
+Operational Status:
+
+Stable — verified in live CLI execution.
+
+--------------------------------------------------
+
 Version 14.0.1 — Study Mode UX Refinement
 --------------------------------------------------
 
