@@ -2,7 +2,9 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.2.0 — — Subject Tree LOGS
+# Version 14.2.2 — — Subject Tree LOGS
+# with toggle/stage UX mode activated
+# cursor restore trap included
 # 
 # Last Updated: 2026-04-23
 # ====================================
@@ -10,6 +12,8 @@
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
 LOGTXT="$LOGDIR/cpl_study_log.txt"
 LOGCSV="$LOGDIR/cpl_study_log.csv"
+
+trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
 
@@ -131,6 +135,16 @@ esac
 
 echo
 echo "Selected: $SUBJECT"
+sleep 1
+
+clear
+
+echo "===================================="
+echo "         CPL STUDY SESSION"
+echo "===================================="
+echo
+echo "Subject: $SUBJECT"
+echo
 echo
 
 ########################################
@@ -156,6 +170,17 @@ esac
 
 echo
 echo "Selected Mode: $MODE_NAME"
+sleep 1
+
+clear
+
+echo "===================================="
+echo "         CPL STUDY SESSION"
+echo "===================================="
+echo
+echo "Subject: $SUBJECT"
+echo "Mode: $MODE_NAME"
+echo
 echo
 
 ########################################
@@ -358,12 +383,17 @@ read -p "Press ENTER to continue..."
 if [ "$MODE_NAME" = "foundation" ] || \
    [ "$MODE_NAME" = "full" ]; then
 
+tput civis
+
 run_timer $WARMUP_MIN "Warm-up"
 run_timer $TARGET_MIN "Target Study"
 
 fi
 
 if [ "$MODE_NAME" != "foundation" ]; then
+
+tput civis
+
 run_exam_timer
 else
 EXAM_ACTUAL_MIN=0
@@ -455,6 +485,7 @@ sleep 1
 done
 echo
 
+tput cnorm
 nano -c -r 100 -l "$TMP_NOTES"
 
 NOTES_TXT=$(cat "$TMP_NOTES")
@@ -710,3 +741,5 @@ echo
 echo
 echo "Log updated successfully."
 echo
+
+tput cnorm
