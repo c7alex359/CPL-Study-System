@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.3.0 — Focus Stage Refinement
-# Subject Tree Logging Stable
+# Version 14.3.1 — Focus Stage Refinement
+# Subject Tree Logging improved
 # UI Focus Mode Enhancements In Progress
 # Last Updated: 2026-04-25
 # ====================================
@@ -600,7 +600,7 @@ SUBJECT_LOG_CSV="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.csv"
 
 if [ -n "$SUBJECT_DIR" ]; then
 
-if [ -n "$SUBJECT_DIR" ]; then
+if [ ! -f "$SUBJECT_LOG_CSV" ]; then
 
 echo "subject_session,date,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes,subject_total_minutes" >> "$SUBJECT_LOG_CSV"
 
@@ -669,7 +669,7 @@ TMP_ENTRY="/tmp/cpl_entry_$$.txt"
 {
 echo
 echo "===================================="
-echo "Session #: $GLOBAL_FMT"
+echo "Global Session #: $GLOBAL_FMT"
 echo "Subject Session #: $SUBJECT_FMT"
 echo "Date: $DATE"
 echo "Subject: $SUBJECT"
@@ -705,15 +705,16 @@ mv "$TMP_ENTRY" "$LOGTXT"
 fi
 
 ########################################
-# WRITE TO SUBJECT TXT LOG
+# WRITE TO SUBJECT TXT LOG (Newest First)
 ########################################
 
 if [ -n "$SUBJECT_LOG_TXT" ]; then
 
 if [ -f "$SUBJECT_LOG_TXT" ]; then
 
-# Append (oldest-first chronological)
-cat "$TMP_ENTRY" >> "$SUBJECT_LOG_TXT"
+# Insert new entry at TOP (newest-first)
+cat "$TMP_ENTRY" "$SUBJECT_LOG_TXT" > "$SUBJECT_LOG_TXT.new"
+mv "$SUBJECT_LOG_TXT.new" "$SUBJECT_LOG_TXT"
 
 else
 
