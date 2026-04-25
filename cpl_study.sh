@@ -2,9 +2,8 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.2.2 — — Subject Tree LOGS
-# with toggle/stage UX mode activated
-# cursor restore trap included
+# Version 14.2.3 — — Subject Tree LOGS
+# Subject CSV block functional now
 # 
 # Last Updated: 2026-04-23
 # ====================================
@@ -456,6 +455,8 @@ MOCK="n"
 
 else
 
+tput cnorm
+
 read -p "Enter Exam Score (%): " SCORE
 read -p "Confidence Level (low/medium/high): " CONF
 read -p "Mock exam passed? (y/n): " MOCK
@@ -479,7 +480,7 @@ echo "Keep notes concise and structured."
 echo "Short bullet-style entries recommended."
 echo
 
-for i in 5 4 3 2 1; do
+for i in 6 5 4 3 2 1; do
 printf "\rStarting in: %s " "$i"
 sleep 1
 done
@@ -719,6 +720,15 @@ rm -f "$TMP_ENTRY"
 
 echo "$GLOBAL_SESSION,$SUBJECT_SESSION,$DATE,$SUBJECT,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,$SESSION_MINUTES" >> "$LOGCSV"
 
+########################################
+# SUBJECT CSV WRITE (FIX)
+########################################
+
+if [ -n "$SUBJECT_LOG_CSV" ]; then
+
+echo "$SUBJECT_SESSION,$DATE,$MODE_NAME,$QUESTIONS,$EXAM_MIN,$EXAM_ACTUAL_MIN,$SCORE,$CONF,$MOCK,$SESSION_MINUTES,$NEW_SUBJECT_TOTAL" >> "$SUBJECT_LOG_CSV"
+
+fi
 
 ########################################
 # FINAL SUMMARY (Restored UX)
