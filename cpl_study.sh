@@ -2,10 +2,10 @@
 
 # ====================================
 # CPL STUDY SESSION SCRIPT
-# Version 14.2.3 — — Subject Tree LOGS
-# Subject CSV block functional now
-# 
-# Last Updated: 2026-04-23
+# Version 14.3.0 — Focus Stage Refinement
+# Subject Tree Logging Stable
+# UI Focus Mode Enhancements In Progress
+# Last Updated: 2026-04-25
 # ====================================
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
@@ -197,10 +197,20 @@ echo
 echo "Questions: $QUESTIONS"
 echo "Maximum Exam Time: $EXAM_MIN minutes"
 
-for i in 4 3 2 1; do
+for i in 5 4 3 2 1; do
 printf "\rStarting in: %s " "$i"
 sleep 1
 done
+echo
+
+clear
+
+echo "===================================="
+echo "         CPL STUDY SESSION"
+echo "===================================="
+echo
+echo "Subject: $SUBJECT"
+echo "Mode: $MODE_NAME"
 echo
 
 else
@@ -225,7 +235,9 @@ SECONDS_LEFT=$TOTAL_SECONDS
 EXTENDED_MINUTES=0
 
 echo
+echo "------------------------------------"
 echo "$PHASE Phase"
+echo "------------------------------------"
 
 if [[ "$PHASE" == "Target Study" ]]; then
 echo "Press 'p' to pause"
@@ -586,9 +598,9 @@ SUBJECT_LOG_CSV="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.csv"
 # CREATE SUBJECT CSV IF MISSING
 ########################################
 
-if [ -n "$SUBJECT_LOG_CSV" ]; then
+if [ -n "$SUBJECT_DIR" ]; then
 
-if [ ! -f "$SUBJECT_LOG_CSV" ]; then
+if [ -n "$SUBJECT_DIR" ]; then
 
 echo "subject_session,date,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes,subject_total_minutes" >> "$SUBJECT_LOG_CSV"
 
@@ -736,8 +748,9 @@ fi
 
 echo
 echo "===================================="
-echo "SESSION COMPLETED"
+echo "✓ SESSION COMPLETED"
 echo "===================================="
+echo
 
 SESSION_HOURS=$((SESSION_MINUTES / 60))
 SESSION_REMAIN=$((SESSION_MINUTES % 60))
@@ -753,3 +766,41 @@ echo "Log updated successfully."
 echo
 
 tput cnorm
+
+########################################
+# POST-SESSION OPTIONS
+########################################
+
+echo
+echo "What would you like to do?"
+echo
+echo "r) Return to main menu"
+echo "l) View latest log entry"
+echo "q) Quit"
+echo
+
+read -n 1 -p "Selection: " FINAL_CHOICE
+echo
+
+case "$FINAL_CHOICE" in
+
+r)
+exec "$0"
+;;
+
+l)
+less "$LOGTXT"
+exec "$0"
+;;
+
+q)
+echo
+echo "Session closed."
+exit
+;;
+
+*)
+exec "$0"
+;;
+
+esac
