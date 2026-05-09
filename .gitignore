@@ -2,7 +2,11 @@
 logs/
 
 # Backups
-Evolution/
+# Ignore backup scripts but keep documentation
+Evolution/*
+!Evolution/Documentation/
+!Evolution/Documentation/*.txt
+!Evolution/Documentation/*.csv
 
 # Old versions
 *.save
@@ -18,3 +22,11 @@ Evolution/
 # Editor files
 *~
 *.swp
+
+# Internal maintenance utilities
+backup_cpl_version.sh
+flip_subject_blocks.sh
+flip_subject_logs.sh
+
+# Outdated internal history archive
+Evolution/Documentation/History/

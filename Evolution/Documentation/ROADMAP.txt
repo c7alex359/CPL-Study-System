@@ -2,21 +2,24 @@
 CPL Study System — Development Roadmap
 ==================================================
 
+Created by:
+c7alex359
+
 Current Version:
-14.2.2 (Subject Logging + Focus Mode Stabilization)
+14.3.1 (Operational Logging Stabilization)
 
 Operational Status:
-Production Baseline — Multi-Log System Active
+Production Stable — Multi-Log System Verified
 
 Installer Version:
-1.1 (Cross-Platform Linux/macOS)
+2.0 (Release Packaging Phase)
 
 Operational Status:
-Stable — Daily Use Ready
+Stable — Packaging Candidate
 
 Next Target Version:
 
-v14.1 — Post-Stabilization Validation & Refinement
+v14.3.x — Focus Workflow Refinement
 v15.0 — Subject Configuration System
 
 ==================================================
@@ -174,6 +177,12 @@ Recent Milestones Achieved:
 ✔ Multi-subject directory logging active
 ✔ Focus-mode UI clearing implemented
 ✔ Cursor safety trap added (Ctrl+C recovery)
+✔ Subject CSV write reliability verified
+✔ Subject TXT chronological integrity stabilized
+✔ Cursor visibility restored across session transitions
+✔ Nano readability timing refined
+✔ Multi-session runtime validation completed
+✔ Version 14.3.1 declared operationally stable
 ----------------------------------------
 
 Sub-Phase 3B — Subject Configuration System
@@ -194,12 +203,41 @@ Expected Outcome:
 
 Dynamic subject management system
 supporting long-term structured progression.
+
+----------------------------------------
+
+Sub-Phase 3C — Operational Stabilization
+----------------------------------------
+
+Status: Completed (v14.3.1)
+
+Primary Objectives:
+
+- Stabilize subject logging behavior
+- Eliminate subject CSV write failures
+- Preserve chronological TXT integrity
+- Verify runtime stability across modes
+- Confirm logging reliability under real usage
+
+Delivered:
+
+✔ Stable subject-level logging
+✔ Reliable session continuation
+✔ Cursor safety behavior validated
+✔ Chronological log consistency preserved
+✔ Multi-session validation completed
+
+Result:
+
+System transitioned from development
+stability testing to production reliability.
+
 ==================================================
 
 Phase 4 — Subject System Expansion
 
 Status:
-Completed (v14.2.0)
+Completed (v14.2.0–14.3.1 stabilization)
 
 Delivered:
 
@@ -295,4 +333,21 @@ Core Rules:
 ✔ Test before release
 ✔ Document before packaging
 
+==========================================
+OPEN SOURCE DEVELOPMENT
+==========================================
+
+- Public GitHub repository maintenance
+- Cross-distribution compatibility testing
+- Improved installation portability
+- Expanded session analytics and reporting
+- Documentation and usability refinements
+
 ==================================================
+LICENSE
+==================================================
+
+This project is licensed under the
+GNU General Public License v3.0 (GPLv3).
+
+See LICENSE for full details.

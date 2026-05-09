@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # ====================================
-# CPL STUDY SESSION SCRIPT
-# Version 14.3.1 — Focus Stage Refinement
-# Subject Tree Logging improved
-# UI Focus Mode Enhancements In Progress
-# Last Updated: 2026-04-25
+# CPL Study System
+# Version 14.3.2
+# Last Updated: 2026-05-09
+#
+# Created by: c7alex359
+# Licensed under GNU GPL v3.0
 # ====================================
+
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
 LOGTXT="$LOGDIR/cpl_study_log.txt"
@@ -157,7 +159,7 @@ echo "3) Exam Only (Momentum Session)"
 echo "4) Exam Only (Endurance Session)"
 
 echo
-read -p "Enter number: " SESSION_MODE
+read -r -p "Enter number: " SESSION_MODE
 
 case $SESSION_MODE in
 1) MODE_NAME="full"; DEFAULT_Q=$DEFAULT_Q_FULL ;;
@@ -188,7 +190,7 @@ echo
 
 if [ "$MODE_NAME" != "foundation" ]; then
 
-read -p "Number of Questions (default $DEFAULT_Q): " QUESTIONS
+read -r -p "Number of Questions (default $DEFAULT_Q): " QUESTIONS
 [ -z "$QUESTIONS" ] && QUESTIONS=$DEFAULT_Q
 
 EXAM_MIN=$(awk "BEGIN {print int($QUESTIONS * $TIME_PER_QUESTION)}")
@@ -322,7 +324,7 @@ echo
 
 RETURN_EXTENDED=$EXTENDED_MINUTES
 
-read -p "Press ENTER to continue..."
+read -r -p "Press ENTER to continue..."
 
 }
 
@@ -383,7 +385,7 @@ EXAM_ACTUAL_MIN=$(( (ELAPSED_SECONDS + 29) / 60 ))
 echo
 echo "Actual Exam Time Used: $EXAM_ACTUAL_MIN minutes"
 
-read -p "Press ENTER to continue..."
+read -r -p "Press ENTER to continue..."
 
 }
 
@@ -469,9 +471,9 @@ else
 
 tput cnorm
 
-read -p "Enter Exam Score (%): " SCORE
-read -p "Confidence Level (low/medium/high): " CONF
-read -p "Mock exam passed? (y/n): " MOCK
+read -r -p "Enter Exam Score (%): " SCORE
+read -r -p "Confidence Level (low/medium/high): " CONF
+read -r -p "Mock exam passed? (y/n): " MOCK
 
 fi
 
@@ -502,7 +504,6 @@ tput cnorm
 nano -c -r 100 -l "$TMP_NOTES"
 
 NOTES_TXT=$(cat "$TMP_NOTES")
-NOTES_CSV=$(cat "$TMP_NOTES" | tr '\n' ' ')
 
 rm -f "$TMP_NOTES"
 
@@ -607,6 +608,7 @@ echo "subject_session,date,mode,questions,exam_max_minutes,exam_actual_minutes,s
 fi
 
 fi
+
 ########################################
 # SESSION COUNTS
 ########################################
@@ -780,7 +782,7 @@ echo "l) View latest log entry"
 echo "q) Quit"
 echo
 
-read -n 1 -p "Selection: " FINAL_CHOICE
+read -r -n 1 -p "Selection: " FINAL_CHOICE
 echo
 
 case "$FINAL_CHOICE" in

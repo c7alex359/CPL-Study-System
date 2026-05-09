@@ -3,6 +3,14 @@ CPL Study System
 User Guide
 ==================================================
 
+Created by:
+c7alex359
+
+Current Stable Version:
+v14.3.2
+
+==================================================
+
 Purpose:
 This script supports structured CPL exam preparation
 using timed study phases and structured reflection.
@@ -10,14 +18,58 @@ using timed study phases and structured reflection.
 Core Workflow:
 
 1. Select subject
-2. Complete study phases:
+   (primary or additional subjects available)
+2. Select session mode
+3. Complete study phases:
    - Warm-up
    - Target Study
    - Exam Mode (optional)
    - Error Review
-3. Enter performance metrics
-4. Record reflection notes
-5. Session stored automatically
+4. Enter performance metrics
+5. Record reflection notes
+6. Session stored automatically
+
+==========================================
+
+License
+--------------------------------
+
+This project is licensed under the
+GNU General Public License v3 (GPLv3).
+
+See LICENSE for full details.
+
+==========================================
+QUICK START
+==========================================
+
+1. Extract package:
+
+tar -xzf CPL_Study_System_v2.0.tar.gz
+
+2. Enter directory:
+
+cd CPL_Study_System_v2.0
+
+3. Run installer:
+
+./install_cpl_v2.sh
+
+4. Reload your shell configuration.
+
+Linux:
+
+source ~/.bashrc
+
+(or source ~/.alias if your system uses ~/.alias)
+
+macOS:
+
+source ~/.zshrc
+
+5. Start system:
+
+cpl-study
 
 ==========================================
 NOTES EDITOR (NANO)
@@ -59,6 +111,7 @@ CSV logfile:
 - Stores structured numeric session data only
 - Contains no free-form notes
 - Ensures long-term calculation stability
+- Includes subject-level CSV tracking
 
 Notes are stored exclusively in the TXT logfile.
 This separation prevents CSV corruption caused
@@ -86,11 +139,8 @@ Key Features:
 
 Version Control:
 
-All historical script versions stored in:
-
-~/Documents/CPL/00_Admin/01_Execution/Evolution/
-
-This allows full rollback capability.
+Historical versions may be archived separately
+for rollback and version tracking.
 
 ==========================================
 SESSION MODES
@@ -240,3 +290,58 @@ CSV Log:
 This architecture improves long-term
 data reliability and prevents formatting
 errors caused by free-form text.
+
+==========================================
+SUBJECT-SPECIFIC LOGS
+==========================================
+
+Each subject maintains its own
+independent study history.
+
+In addition to the central logs,
+the system automatically creates:
+
+Subject TXT Logs:
+- Stored inside each subject directory
+- Contain full session notes
+- Preserve chronological study history
+- Allow focused subject review
+
+Subject CSV Logs:
+- Track structured subject session data
+- Maintain subject session numbering
+- Record subject-specific totals
+- Support long-term subject tracking
+
+This design allows:
+
+- Focused review of individual subjects
+- Reduced distraction from unrelated material
+- Clear subject-specific learning continuity
+- Structured long-term subject progression
+
+==========================================
+SYSTEM STABILITY STATUS
+==========================================
+
+Current Version:
+
+v14.3.2
+
+Status:
+
+Operationally stable and verified
+through live study execution.
+
+This version represents a
+production-ready multi-subject study system
+with stable logging and session control.
+
+==================================================
+LICENSE
+==================================================
+
+This project is licensed under the
+GNU General Public License v3.0 (GPLv3).
+
+See LICENSE for full details.

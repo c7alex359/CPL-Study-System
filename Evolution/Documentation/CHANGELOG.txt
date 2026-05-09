@@ -1,6 +1,75 @@
 ==================================================
-CPL Study System — Change Log
+CPL Study System
+CHANGELOG
 ==================================================
+
+Created by:
+c7alex359
+
+Current Stable Version:
+v14.3.2
+
+==================================================
+Version 14.3.2 (Stable)
+2026-05-09
+==================================================
+
+- Introduced GNU GPL v3.0 licensing
+- Added project authorship attribution
+- Standardized script header formatting
+- Standardized read prompts using read -r
+- Removed deprecated NOTES_CSV architecture remnants
+- Refined public release structure and metadata
+- Minor internal cleanup and consistency improvements
+
+--------------------------------------------------
+
+Version 14.3.1 — Operational Stabilization 
+& Logging Reliability
+--------------------------------------------------
+
+Release Date:
+2026-04-28
+
+Summary:
+
+This version consolidates stability across the
+multi-subject logging architecture and finalizes
+operational behavior following live runtime testing.
+
+Focus was placed on resolving edge cases in subject
+log generation, preserving chronological integrity,
+and validating long-session stability.
+
+Key Improvements:
+
+- Resolved subject CSV write failure
+- Stabilized subject TXT log ordering behavior
+- Verified subject session continuity
+- Reinforced centralized logging reliability
+- Improved nano launch readability (+1 second delay)
+- Restored cursor visibility during input phases
+- Preserved compatibility with existing logs
+- Verified multi-review extension behavior
+
+Operational Validation:
+
+- Full-session runtime verified
+- Momentum-session runtime verified
+- Subject logging confirmed functional
+- Multi-log architecture validated under live usage
+- No arithmetic regressions detected
+
+Architecture Impact:
+
+Moderate — operational stabilization
+of multi-log system behavior.
+
+Operational Status:
+
+Stable — declared production-ready
+following successful live study sessions.
+
 --------------------------------------------------
 
 Version 14.2.2 — Focus Mode UI & Cursor Safety
@@ -635,4 +704,12 @@ Architecture Impact:
 
 High — structural redesign.
 
+
 ==================================================
+LICENSE
+==================================================
+
+This project is licensed under the
+GNU General Public License v3.0 (GPLv3).
+
+See LICENSE for full details.
