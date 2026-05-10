@@ -72,6 +72,22 @@ source ~/.zshrc
 cpl-study
 
 ==========================================
+
+## Screenshots
+
+### Main Subject Selection
+
+![Main Menu](screenshots/main-menu.png)
+
+### Momentum Mode
+
+![Momentum Mode](screenshots/momentum-mode.png)
+
+### Session Summary
+
+![Session Summary](screenshots/session-summary.png)
+
+==========================================
 NOTES EDITOR (NANO)
 ==========================================
 
