@@ -6,7 +6,7 @@ Created by:
 c7alex359
 
 Current Version:
-14.3.1 (Operational Logging Stabilization)
+14.3.2
 
 Operational Status:
 Production Stable — Multi-Log System Verified
@@ -182,7 +182,7 @@ Recent Milestones Achieved:
 ✔ Cursor visibility restored across session transitions
 ✔ Nano readability timing refined
 ✔ Multi-session runtime validation completed
-✔ Version 14.3.1 declared operationally stable
+✔ Version 14.3.2 declared operationally stable
 ----------------------------------------
 
 Sub-Phase 3B — Subject Configuration System
@@ -237,7 +237,7 @@ stability testing to production reliability.
 Phase 4 — Subject System Expansion
 
 Status:
-Completed (v14.2.0–14.3.1 stabilization)
+Completed (v14.2.0–14.3.2 stabilization)
 
 Delivered:
 

@@ -3,7 +3,7 @@
 # ====================================
 # CPL Study System
 # Version 14.3.2
-# Last Updated: 2026-05-09
+# Last Updated: 2026-05-10
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -252,7 +252,7 @@ fi
 
 while [ $SECONDS_LEFT -gt 0 ]; do
 
-read -t 1 -n 1 -s KEY
+read -r -t 1 -n 1 -s KEY
 
 # Pause support ONLY for Target Study
 if [[ "$PHASE" == "Target Study" ]]; then
@@ -263,7 +263,7 @@ echo
 echo "Paused. Press 'r' to resume."
 
 while true; do
-read -n 1 -s KEY
+read -r -n 1 -s KEY
 [ "$KEY" = "r" ] && break
 done
 
@@ -345,7 +345,7 @@ echo "Press 'q' to finish early."
 
 while [ $SECONDS_LEFT -gt 0 ]; do
 
-read -t 1 -n 1 -s KEY
+read -r -t 1 -n 1 -s KEY
 
 if [ "$KEY" = "q" ]; then
 echo

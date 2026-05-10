@@ -29,6 +29,12 @@ Core Workflow:
 5. Record reflection notes
 6. Session stored automatically
 
+Quality Assurance:
+
+- Runtime-tested under Linux
+- Secondary-user installation validated
+- ShellCheck-reviewed Bash scripts
+
 ==========================================
 
 License
