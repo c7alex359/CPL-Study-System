@@ -14,6 +14,9 @@ LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
 LOGTXT="$LOGDIR/cpl_study_log.txt"
 LOGCSV="$LOGDIR/cpl_study_log.csv"
 
+SCRIPT_DIR="$(dirname "$0")"
+SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
+
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
@@ -59,12 +62,16 @@ echo
 # SUBJECT
 ########################################
 
+mapfile -t SUBJECT_LINES < "$SUBJECT_DB"
+
 echo "Select Subject:"
-echo "1) Meteorology"
-echo "2) Human Performance & Limitations"
-echo "3) General Navigation"
-echo "4) Communications"
-echo "5) Air Law"
+for i in {0..4}; do
+
+SUBJECT_NAME=$(echo "${SUBJECT_LINES[$i]}" | cut -d'|' -f1)
+
+echo "$((i + 1))) $SUBJECT_NAME"
+
+done
 
 echo
 echo "0) Show Additional Subjects"
@@ -84,15 +91,13 @@ case $SUBJECT_NUM in
 echo
 echo "Additional Subjects:"
 echo
-echo "6) Principles of Flight"
-echo "7) Instrumentation"
-echo "8) Radio Navigation"
-echo "9) Airframe, Systems, Electrics, Power Plant"
-echo "10) Operational Procedures"
-echo "11) Mass & Balance"
-echo "12) Performance"
-echo "13) Flight Planning & Monitoring"
-echo "14) Knowledge, Skills and Attitudes (KSA)"
+for i in {5..13}; do
+
+SUBJECT_NAME=$(echo "${SUBJECT_LINES[$i]}" | cut -d'|' -f1)
+
+echo "$((i + 1))) $SUBJECT_NAME"
+
+done
 
 echo
 echo "0) Back to Main Subjects"
@@ -512,8 +517,6 @@ DATE=$(date "+%Y-%m-%d")
 ########################################
 # SUBJECT LOG PATH MAPPING
 ########################################
-
-SUBJECT_DB="$(dirname "$0")/config/subjects.db"
 
 SUBJECT_ENTRY=$(grep "^${SUBJECT}|" "$SUBJECT_DB")
 
