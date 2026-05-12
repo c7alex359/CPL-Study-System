@@ -23,6 +23,35 @@ v14.3.x — Focus Workflow Refinement
 v15.0 — Subject Configuration System
 
 ==================================================
+v15.x ARCHITECTURAL TRANSITION
+==================================================
+
+Focus:
+
+Transition from hardcoded subject handling
+toward configuration-driven runtime behavior.
+
+Core Targets:
+
+v15.0
+- Subject metadata registry
+- Dynamic subject menu rendering
+- Installer-based primary subject selection
+- Config persistence layer
+
+v15.1
+- Internal refactoring and abstraction cleanup
+- Runtime configuration validation
+- Menu rendering helpers
+- Reduced duplicated logic
+
+v15.2
+- Runtime subject reordering
+- Passed-subject workflow management
+- Dynamic priority adjustment
+- Personalized progression flows
+
+==================================================
 COMPLETED PHASES
 ==================================================
 
@@ -185,24 +214,45 @@ Recent Milestones Achieved:
 ✔ Version 14.3.2 declared operationally stable
 ----------------------------------------
 
-Sub-Phase 3B — Subject Configuration System
+Sub-Phase 3B — Dynamic Subject Configuration System
 -------------------------------------------
 
 Status: Pending
 
 Primary Objectives:
 
-- subjects.cfg implementation
-- Initial subject selection during setup
-- Ability to activate selected subjects
+- Centralized subject metadata registry
+- Dynamic menu generation
+- Configuration-driven subject rendering
+- Initial primary-subject selection during install
+- Runtime subject prioritization
+- Reorderable primary subjects
 - Passed subject tracking
-- Visual progress indicators
-- Subject hiding after completion
+- Optional subject hiding
+- User configuration persistence
 
 Expected Outcome:
 
 Dynamic subject management system
 supporting long-term structured progression.
+
+Architectural Direction:
+
+Transition the CPL Study System from
+hardcoded subject logic toward
+configuration-driven runtime behavior.
+
+Subjects should increasingly function as:
+
+- configurable metadata
+rather than:
+- embedded application logic
+
+This enables:
+- customizable workflows
+- cleaner menu rendering
+- future extensibility
+- improved maintainability
 
 ----------------------------------------
 
@@ -332,6 +382,18 @@ Core Rules:
 ✔ Prefer incremental refinement
 ✔ Test before release
 ✔ Document before packaging
+
+The system should remain:
+
+- terminal-native
+- lightweight
+- offline-first
+- dependency-light
+- Bash-compatible
+
+Configuration-driven behavior should
+improve flexibility without introducing
+unnecessary complexity or framework dependence.
 
 ==========================================
 OPEN SOURCE DEVELOPMENT
