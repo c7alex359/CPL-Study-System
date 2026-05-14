@@ -2,13 +2,12 @@
 
 # ====================================
 # CPL Study System
-# Version 15.0-dev
-# Last Updated: 2026-05-12
+# Version 15.1-dev
+# Last Updated: 2026-05-14
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
 # ====================================
-
 
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
 LOGTXT="$LOGDIR/cpl_study_log.txt"
@@ -79,12 +78,18 @@ echo "0) Show Additional Subjects"
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
+if [[ "$SUBJECT_NUM" =~ ^[1-5]$ ]]; then
+
+INDEX=$((SUBJECT_NUM - 1))
+
+SUBJECT=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+
+fi
+
 case $SUBJECT_NUM in
-1) SUBJECT="Meteorology" ;;
-2) SUBJECT="Human Performance & Limitations" ;;
-3) SUBJECT="General Navigation" ;;
-4) SUBJECT="Communications" ;;
-5) SUBJECT="Air Law" ;;
+
+[1-5])
+;;
 
 0)
 
@@ -105,6 +110,21 @@ echo "0) Back to Main Subjects"
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
+if [[ "$SUBJECT_NUM" =~ ^(6|7|8|9|10|11|12|13|14)$ ]]; then
+
+INDEX=$((SUBJECT_NUM - 1))
+
+SUBJECT=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+
+else
+
+echo
+echo "Invalid selection."
+sleep 1
+exec "$0"
+
+fi
+
 case $SUBJECT_NUM in
 
 0)
@@ -114,15 +134,9 @@ sleep 1
 exec "$0"
 ;;
 
-6) SUBJECT="Principles of Flight" ;;
-7) SUBJECT="Instrumentation" ;;
-8) SUBJECT="Radio Navigation" ;;
-9) SUBJECT="Airframe, Systems, Electrics, Power Plant" ;;
-10) SUBJECT="Operational Procedures" ;;
-11) SUBJECT="Mass & Balance" ;;
-12) SUBJECT="Performance" ;;
-13) SUBJECT="Flight Planning & Monitoring" ;;
-14) SUBJECT="Knowledge, Skills and Attitudes (KSA)" ;;
+esac
+
+;;
 
 *)
 echo
@@ -130,12 +144,6 @@ echo "Invalid selection."
 sleep 1
 exec "$0"
 ;;
-
-esac
-
-;;
-
-*) SUBJECT="Unknown" ;;
 
 esac
 
