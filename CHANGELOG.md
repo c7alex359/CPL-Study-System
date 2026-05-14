@@ -10,6 +10,16 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.1-dev
+2026-05-14
+==================================================
+
+- Centralized subject metadata into config/subjects.db
+- Replaced hardcoded subject menus with dynamic rendering
+- Replaced hardcoded subject selection with dynamic lookup
+- Established configuration-driven subject architecture foundation
+
+==================================================
 Version 14.3.2 (Stable)
 2026-05-09
 ==================================================
