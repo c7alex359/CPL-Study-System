@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL Study System
-# Version 15.2-dev
+# Version 15.3-dev
 # Last Updated: 2026-05-15
 #
 # Created by: c7alex359
@@ -49,6 +49,8 @@ REVIEW_ENDURANCE_MIN=20
 EXTEND_MIN=5
 BAR_WIDTH=30
 
+PRIMARY_SUBJECT_COUNT=5
+
 ########################################
 
 clear
@@ -63,9 +65,10 @@ echo
 ########################################
 
 mapfile -t ACTIVE_LINES < "$ACTIVE_SUBJECTS"
+TOTAL_SUBJECTS=${#ACTIVE_LINES[@]}
 
 echo "Select Subject:"
-for i in {0..4}; do
+for ((i=0; i<PRIMARY_SUBJECT_COUNT && i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
@@ -79,7 +82,9 @@ echo "0) Show Additional Subjects"
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
-if [[ "$SUBJECT_NUM" =~ ^[1-5]$ ]]; then
+if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
+   [ "$SUBJECT_NUM" -ge 1 ] && \
+   [ "$SUBJECT_NUM" -le "$PRIMARY_SUBJECT_COUNT" ]; then
 
 INDEX=$((SUBJECT_NUM - 1))
 
@@ -89,7 +94,17 @@ fi
 
 case $SUBJECT_NUM in
 
-[1-5])
+[1-9]|[1-9][0-9])
+
+if [ "$SUBJECT_NUM" -ge 1 ] && \
+   [ "$SUBJECT_NUM" -le "$PRIMARY_SUBJECT_COUNT" ]; then
+:
+else
+echo
+echo "Invalid selection."
+sleep 1
+exec "$0"
+fi
 ;;
 
 0)
@@ -97,7 +112,7 @@ case $SUBJECT_NUM in
 echo
 echo "Additional Subjects:"
 echo
-for i in {5..13}; do
+for ((i=PRIMARY_SUBJECT_COUNT; i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
@@ -111,7 +126,9 @@ echo "0) Back to Main Subjects"
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
-if [[ "$SUBJECT_NUM" =~ ^(6|7|8|9|10|11|12|13|14)$ ]]; then
+if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
+   [ "$SUBJECT_NUM" -gt "$PRIMARY_SUBJECT_COUNT" ] && \
+   [ "$SUBJECT_NUM" -le "$TOTAL_SUBJECTS" ]; then
 
 INDEX=$((SUBJECT_NUM - 1))
 
