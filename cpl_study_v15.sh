@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.1-dev
-# Last Updated: 2026-05-14
+# Version 15.2-dev
+# Last Updated: 2026-05-15
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -15,6 +15,7 @@ LOGCSV="$LOGDIR/cpl_study_log.csv"
 
 SCRIPT_DIR="$(dirname "$0")"
 SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
+ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
 
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
@@ -61,12 +62,12 @@ echo
 # SUBJECT
 ########################################
 
-mapfile -t SUBJECT_LINES < "$SUBJECT_DB"
+mapfile -t ACTIVE_LINES < "$ACTIVE_SUBJECTS"
 
 echo "Select Subject:"
 for i in {0..4}; do
 
-SUBJECT_NAME=$(echo "${SUBJECT_LINES[$i]}" | cut -d'|' -f1)
+SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
 echo "$((i + 1))) $SUBJECT_NAME"
 
@@ -82,7 +83,7 @@ if [[ "$SUBJECT_NUM" =~ ^[1-5]$ ]]; then
 
 INDEX=$((SUBJECT_NUM - 1))
 
-SUBJECT=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+SUBJECT="${ACTIVE_LINES[$INDEX]}"
 
 fi
 
@@ -98,7 +99,7 @@ echo "Additional Subjects:"
 echo
 for i in {5..13}; do
 
-SUBJECT_NAME=$(echo "${SUBJECT_LINES[$i]}" | cut -d'|' -f1)
+SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
 echo "$((i + 1))) $SUBJECT_NAME"
 
@@ -114,7 +115,7 @@ if [[ "$SUBJECT_NUM" =~ ^(6|7|8|9|10|11|12|13|14)$ ]]; then
 
 INDEX=$((SUBJECT_NUM - 1))
 
-SUBJECT=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+SUBJECT="${ACTIVE_LINES[$INDEX]}"
 
 else
 
