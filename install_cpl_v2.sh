@@ -127,16 +127,13 @@ touch "$LOGDIR/cpl_study_log.csv"
 
 ALIAS_LINE="alias cpl-study='$BASE/cpl_study_v15.sh'"
 
-if grep -q "cpl-study" "$SHELL_CONFIG" 2>/dev/null; then
+# Remove old CPL alias if present
+sed -i '/alias cpl-study=/d' "$SHELL_CONFIG"
 
-    echo "Alias already exists."
+# Add fresh alias
+echo "$ALIAS_LINE" >> "$SHELL_CONFIG"
 
-else
-
-    echo "$ALIAS_LINE" >> "$SHELL_CONFIG"
-    echo "Alias added to $SHELL_CONFIG"
-
-fi
+echo "Alias updated in $SHELL_CONFIG"
 
 ########################################
 # Interactive Focus Selection
