@@ -10,6 +10,33 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.3-dev
+2026-05-15
+==================================================
+
+- Introduced active_subjects.conf runtime configuration layer
+- Implemented runtime-configurable subject prioritization
+- Added dynamic subject partitioning architecture
+- Removed hardcoded subject count assumptions
+- Removed hardcoded primary-subject menu assumptions
+- Added configurable PRIMARY_SUBJECT_COUNT runtime control
+- Separated canonical subject metadata from operational state
+- Standardized Communications naming across runtime architecture
+- Added installer-driven active subject setup workflow
+- Installer now generates personalized active_subjects.conf
+- Established fully configuration-driven subject rendering system
+
+Architecture Impact:
+
+Major — runtime architecture generalized into
+configuration-driven study workflow engine.
+
+Operational Status:
+
+Stable development milestone — validated through
+live study sessions and runtime reordering tests.
+
+==================================================
 Version 15.1-dev
 2026-05-14
 ==================================================

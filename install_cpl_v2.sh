@@ -2,7 +2,7 @@
 
 # ==========================================
 # CPL Study System Installer
-# Version 2.0
+# Version 2.1
 # Linux + macOS Compatible
 #
 # Created by: c7alex359
@@ -11,7 +11,7 @@
 
 echo
 echo "=========================================="
-echo "     CPL STUDY SYSTEM INSTALLER v2.0"
+echo "     CPL STUDY SYSTEM INSTALLER v2.1"
 echo "=========================================="
 echo
 
@@ -74,6 +74,7 @@ echo
 echo "Creating admin directory structure..."
 
 mkdir -p "$LOGDIR"
+mkdir -p "$BASE/config"
 
 ########################################
 # Create Subject Directory Structure
@@ -94,7 +95,7 @@ mkdir -p "$ROOT/061_General_Navigation"
 mkdir -p "$ROOT/062_Radio_Navigation"
 mkdir -p "$ROOT/070_Operational_Procedures"
 mkdir -p "$ROOT/081_Principles_of_Flight"
-mkdir -p "$ROOT/090_Communication"
+mkdir -p "$ROOT/090_Communications"
 mkdir -p "$ROOT/100_KSA"
 
 ########################################
@@ -104,9 +105,11 @@ mkdir -p "$ROOT/100_KSA"
 echo
 echo "Installing CPL Study script..."
 
-cp cpl_study.sh "$BASE/"
+cp cpl_study_v15.sh "$BASE/"
+cp config/subjects.db "$BASE/config/"
+mapfile -t SUBJECT_LINES < "$BASE/config/subjects.db"
 
-chmod +x "$BASE/cpl_study.sh"
+chmod +x "$BASE/cpl_study_v15.sh"
 
 ########################################
 # Create logs if missing
@@ -122,7 +125,7 @@ touch "$LOGDIR/cpl_study_log.csv"
 # Add alias
 ########################################
 
-ALIAS_LINE="alias cpl-study='$BASE/cpl_study.sh'"
+ALIAS_LINE="alias cpl-study='$BASE/cpl_study_v15.sh'"
 
 if grep -q "cpl-study" "$SHELL_CONFIG" 2>/dev/null; then
 
@@ -134,6 +137,68 @@ else
     echo "Alias added to $SHELL_CONFIG"
 
 fi
+
+########################################
+# Interactive Focus Selection
+########################################
+
+echo
+echo "=========================================="
+echo " SUBJECT PRIORITIZATION SETUP"
+echo "=========================================="
+echo
+echo "Select up to 5 focus subjects."
+echo "These will appear in the main startup menu."
+echo
+
+for i in "${!SUBJECT_LINES[@]}"; do
+
+SUBJECT_NAME=$(echo "${SUBJECT_LINES[$i]}" | cut -d'|' -f1)
+
+echo "$((i + 1))) $SUBJECT_NAME"
+
+done
+
+echo
+read -r -p "Enter focus subjects (example: 8 9 13): " FOCUS_SELECTION
+
+ACTIVE_FILE="$BASE/config/active_subjects.conf"
+
+> "$ACTIVE_FILE"
+
+for NUM in $FOCUS_SELECTION; do
+
+INDEX=$((NUM - 1))
+
+SUBJECT_NAME=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+
+echo "$SUBJECT_NAME" >> "$ACTIVE_FILE"
+
+done
+
+for LINE in "${SUBJECT_LINES[@]}"; do
+
+SUBJECT_NAME=$(echo "$LINE" | cut -d'|' -f1)
+
+FOUND=0
+
+for NUM in $FOCUS_SELECTION; do
+
+INDEX=$((NUM - 1))
+FOCUS_NAME=$(echo "${SUBJECT_LINES[$INDEX]}" | cut -d'|' -f1)
+
+if [ "$SUBJECT_NAME" = "$FOCUS_NAME" ]; then
+FOUND=1
+break
+fi
+
+done
+
+if [ "$FOUND" -eq 0 ]; then
+echo "$SUBJECT_NAME" >> "$ACTIVE_FILE"
+fi
+
+done
 
 ########################################
 # Finish
