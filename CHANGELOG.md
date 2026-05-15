@@ -10,6 +10,34 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.4-dev
+2026-05-15
+==================================================
+
+- Added dynamic primary subject menu sizing
+- Removed final hardcoded primary menu assumptions
+- Introduced primary_subject_count.conf runtime layer
+- Installer now generates dynamic primary subject counts
+- Runtime menu sizing now fully configuration-driven
+- Added runtime fallback handling for missing count config
+- Validated installer deployment through clean-user testing
+- Refined installer alias replacement logic
+- Improved installer idempotency during reinstallation
+- Verified distribution tarball deployment workflow
+
+Architecture Impact:
+
+Major — completed transition from partially
+dynamic subject handling to fully configurable
+runtime menu orchestration.
+
+Operational Status:
+
+Stable development milestone — validated through
+live runtime execution and clean-user installation
+testing.
+
+==================================================
 Version 15.3-dev
 2026-05-15
 ==================================================

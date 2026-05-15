@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL Study System
-# Version 15.3-dev
+# Version 15.4-dev
 # Last Updated: 2026-05-15
 #
 # Created by: c7alex359
@@ -16,6 +16,7 @@ LOGCSV="$LOGDIR/cpl_study_log.csv"
 SCRIPT_DIR="$(dirname "$0")"
 SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
 ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
+PRIMARY_COUNT_FILE="$SCRIPT_DIR/config/primary_subject_count.conf"
 
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
@@ -49,8 +50,6 @@ REVIEW_ENDURANCE_MIN=20
 EXTEND_MIN=5
 BAR_WIDTH=30
 
-PRIMARY_SUBJECT_COUNT=5
-
 ########################################
 
 clear
@@ -65,6 +64,13 @@ echo
 ########################################
 
 mapfile -t ACTIVE_LINES < "$ACTIVE_SUBJECTS"
+
+if [ -f "$PRIMARY_COUNT_FILE" ]; then
+    PRIMARY_SUBJECT_COUNT=$(cat "$PRIMARY_COUNT_FILE")
+else
+    PRIMARY_SUBJECT_COUNT=5
+fi
+
 TOTAL_SUBJECTS=${#ACTIVE_LINES[@]}
 
 echo "Select Subject:"

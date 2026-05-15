@@ -9,6 +9,9 @@ c7alex359
 Current Stable Version:
 v14.3.2
 
+Current Development Version:
+v15.4-dev
+
 ==================================================
 
 Purpose:
@@ -34,6 +37,8 @@ Quality Assurance:
 - Runtime-tested under Linux
 - Secondary-user installation validated
 - ShellCheck-reviewed Bash scripts
+- Distribution tarball deployment verified
+- Clean-user installer workflow validated
 
 ==========================================
 
@@ -51,7 +56,7 @@ QUICK START
 
 1. Extract package:
 
-tar -xzf CPL_Study_System_v2.0.tar.gz
+tar -xzf CPL_Study_System_v15-dev.tar.gz
 
 2. Enter directory:
 
@@ -314,6 +319,44 @@ data reliability and prevents formatting
 errors caused by free-form text.
 
 ==========================================
+RUNTIME CONFIGURATION SYSTEM
+==========================================
+
+Version 15.x introduces a fully
+configuration-driven subject system.
+
+Core Configuration Files:
+
+subjects.db
+- Canonical subject registry
+- Defines subject names
+- Defines folder mappings
+- Defines logfile prefixes
+
+active_subjects.conf
+- Defines active operational subject order
+- Controls primary study priorities
+- Supports personalized focus workflows
+
+primary_subject_count.conf
+- Defines how many subjects appear
+  in the primary startup menu
+- Remaining subjects automatically
+  move into Additional Subjects
+
+This architecture allows:
+
+- Personalized study prioritization
+- Dynamic menu rendering
+- Flexible subject ordering
+- Runtime configurability
+- Installer-driven focus setup
+
+The runtime no longer depends on
+hardcoded subject ordering or
+fixed menu assumptions.
+
+==========================================
 SUBJECT-SPECIFIC LOGS
 ==========================================
 
@@ -346,9 +389,11 @@ This design allows:
 SYSTEM STABILITY STATUS
 ==========================================
 
-Current Version:
-
+Stable Release:
 v14.3.2
+
+Current Development Branch:
+v15.4-dev
 
 Status:
 

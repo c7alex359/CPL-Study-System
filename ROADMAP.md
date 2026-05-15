@@ -5,22 +5,29 @@ CPL Study System — Development Roadmap
 Created by:
 c7alex359
 
-Current Version:
-14.3.2
+Stable Release:
+v14.3.2
 
-Operational Status:
+Current Development Branch:
+v15.4-dev
+
+Stable Release Status:
 Production Stable — Multi-Log System Verified
 
-Installer Version:
-2.0 (Release Packaging Phase)
+Development Branch Status:
+Stable Development Branch —
+Configuration-Driven Runtime Architecture Verified
 
-Operational Status:
-Stable — Packaging Candidate
+Installer Status:
+Cross-user deployment validated
+through clean-user installation testing
 
-Next Target Version:
+Current Development Focus:
 
-v14.3.x — Focus Workflow Refinement
-v15.0 — Subject Configuration System
+- Completion workflow orchestration
+- Subject progression management
+- Post-session settings integration
+- Runtime UX refinement
 
 ==================================================
 v15.x ARCHITECTURAL TRANSITION
@@ -217,42 +224,60 @@ Recent Milestones Achieved:
 Sub-Phase 3B — Dynamic Subject Configuration System
 -------------------------------------------
 
-Status: Pending
+Status: Major Architectural Transition Completed
+(v15.0-dev → v15.4-dev)
 
-Primary Objectives:
+Delivered:
 
-- Centralized subject metadata registry
-- Dynamic menu generation
-- Configuration-driven subject rendering
-- Initial primary-subject selection during install
-- Runtime subject prioritization
-- Reorderable primary subjects
-- Passed subject tracking
-- Optional subject hiding
-- User configuration persistence
+✔ Centralized subject metadata registry
+✔ Dynamic menu generation
+✔ Configuration-driven subject rendering
+✔ Runtime-configurable subject prioritization
+✔ Installer-driven focus subject setup
+✔ Dynamic primary subject partitioning
+✔ Runtime-configurable menu sizing
+✔ Active subject persistence layer
+✔ Distribution deployment validation
+✔ Clean-user installer validation
+✔ Fully configuration-driven startup workflow
 
-Expected Outcome:
+Architecture Result:
 
-Dynamic subject management system
-supporting long-term structured progression.
+The CPL Study System transitioned from
+hardcoded subject orchestration toward
+fully configuration-driven runtime behavior.
 
-Architectural Direction:
+Subjects now function primarily as:
 
-Transition the CPL Study System from
-hardcoded subject logic toward
-configuration-driven runtime behavior.
-
-Subjects should increasingly function as:
-
-- configurable metadata
+- runtime metadata
 rather than:
 - embedded application logic
 
-This enables:
-- customizable workflows
-- cleaner menu rendering
-- future extensibility
-- improved maintainability
+Core Runtime Layers:
+
+subjects.db
+- Canonical subject registry
+
+active_subjects.conf
+- Operational subject ordering
+
+primary_subject_count.conf
+- Dynamic startup menu partitioning
+
+Result:
+
+The runtime no longer depends on:
+- fixed subject order
+- fixed menu sizing
+- hardcoded primary subject assumptions
+
+This architecture enables:
+
+- personalized study prioritization
+- flexible startup workflows
+- dynamic menu rendering
+- future subject completion workflows
+- scalable runtime extensibility
 
 ----------------------------------------
 
@@ -281,6 +306,29 @@ Result:
 
 System transitioned from development
 stability testing to production reliability.
+
+----------------------------------------
+
+Sub-Phase 3D — Completion & Progression Workflows
+-------------------------------------------
+
+Status: Planned
+
+Primary Objectives:
+
+- Subject completion workflow
+- Optional subject hiding
+- Completion-state persistence
+- Runtime progression messaging
+- Post-session settings integration
+- Dynamic focus-subject reassignment
+- Exam completion milestone UX
+
+Expected Outcome:
+
+Structured long-term progression system
+supporting real-world exam completion
+workflows and adaptive study prioritization.
 
 ==================================================
 
@@ -329,15 +377,18 @@ and workload distribution.
 
 --------------------------------------------------
 
-Phase 6 — Configuration System
+Phase 6 — User Workflow Customization
 --------------------------------
 
 Planned Features:
 
-- Initial setup wizard
-- Subject configuration prompts
-- Default study timing customization
-- Personal configuration profiles
+- Interactive settings menu
+- Subject completion controls
+- Dynamic subject hiding/restoration
+- Runtime focus reassignment
+- Custom timing profiles
+- Personalized workflow presets
+- User-adjustable startup behavior
 
 Expected Outcome:
 

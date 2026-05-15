@@ -2,7 +2,7 @@
 
 # ==========================================
 # CPL Study System Installer
-# Version 2.1
+# Version 2.2
 # Linux + macOS Compatible
 #
 # Created by: c7alex359
@@ -11,7 +11,7 @@
 
 echo
 echo "=========================================="
-echo "     CPL STUDY SYSTEM INSTALLER v2.1"
+echo "     CPL STUDY SYSTEM INSTALLER v2.2"
 echo "=========================================="
 echo
 
@@ -158,6 +158,9 @@ done
 
 echo
 read -r -p "Enter focus subjects (example: 8 9 13): " FOCUS_SELECTION
+
+PRIMARY_COUNT=$(echo "$FOCUS_SELECTION" | wc -w)
+echo "$PRIMARY_COUNT" > "$BASE/config/primary_subject_count.conf"
 
 ACTIVE_FILE="$BASE/config/active_subjects.conf"
 
