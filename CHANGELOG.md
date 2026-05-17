@@ -52,8 +52,9 @@ live session execution and workflow testing.
 
 Known Development Observations:
 
-- Review phases currently log configured review
-  allocation rather than actual elapsed review time
+- Session timing architecture now uses actual
+  elapsed runtime duration rather than configured
+  review allocation estimates
 
 - Rapid first-run deployment testing exposed
   a possible session-counter initialization edge case
