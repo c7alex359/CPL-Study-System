@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.4-dev
-# Last Updated: 2026-05-15
+# Version 15.5-dev
+# Last Updated: 2026-05-17
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -752,7 +752,9 @@ echo
 echo "What would you like to do?"
 echo
 echo "r) Return to main menu"
+echo "c) Change settings"
 echo "l) View latest log entry"
+echo "e) Log completed exam subjects"
 echo "q) Quit"
 echo
 
@@ -765,8 +767,34 @@ r)
 exec "$0"
 ;;
 
+c)
+
+echo
+echo "===================================="
+echo "         SETTINGS MENU"
+echo "===================================="
+echo
+echo "1) Change focus subjects"
+echo "2) Change timer settings"
+echo "3) Log maintenance"
+echo
+read -r -p "Press ENTER to return..."
+exec "$0"
+;;
+
 l)
 less "$LOGTXT"
+exec "$0"
+;;
+
+e)
+
+echo
+echo "Completed subject workflow"
+echo "coming in future version."
+echo
+
+read -r -p "Press ENTER to return..."
 exec "$0"
 ;;
 

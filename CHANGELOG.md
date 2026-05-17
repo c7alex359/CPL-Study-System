@@ -10,6 +10,38 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.5-dev
+2026-05-17
+==================================================
+
+- Introduced post-session workflow orchestration layer
+- Added post-session operational navigation menu
+- Added Settings menu framework
+- Added progression workflow entry points
+- Added completed-subject workflow shell
+- Introduced Log Maintenance terminology
+- Preserved distraction-free startup workflow philosophy
+- Established architecture foundation for completion tracking
+- Established architecture foundation for subject progression UX
+
+UX Impact:
+
+Major — system workflow now extends beyond
+session execution into long-term progression
+and operational study management.
+
+Architectural Impact:
+
+Moderate — introduced post-session orchestration
+layer without altering stable runtime execution
+architecture.
+
+Operational Status:
+
+Stable development milestone — validated through
+live session execution and workflow testing.
+
+==================================================
 Version 15.4-dev
 2026-05-15
 ==================================================
