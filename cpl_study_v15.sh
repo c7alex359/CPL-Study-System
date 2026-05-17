@@ -811,9 +811,75 @@ echo "the primary startup menu size."
 echo
 
 read -r -p "Enter focus subjects: " NEW_FOCUS
+read -ra FOCUS_ARRAY <<< "$NEW_FOCUS"
+
+NEW_ACTIVE=()
+REMAINING=()
+USED_NUMBERS=()
+
+for NUM in "${FOCUS_ARRAY[@]}"; do
+
+if [[ ! "$NUM" =~ ^[0-9]+$ ]]; then
+    continue
+fi
+
+DUPLICATE=0
+
+for USED in "${USED_NUMBERS[@]}"; do
+
+    if [ "$NUM" = "$USED" ]; then
+        DUPLICATE=1
+        break
+    fi
+
+done
+
+if [ "$DUPLICATE" -eq 1 ]; then
+    continue
+fi
+
+INDEX=$((NUM - 1))
+
+if [ "$INDEX" -ge 0 ] && \
+   [ "$INDEX" -lt "$TOTAL_SUBJECTS" ]; then
+
+    NEW_ACTIVE+=("${ACTIVE_LINES[$INDEX]}")
+    USED_NUMBERS+=("$NUM")
+
+fi
+
+done
+
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
+
+FOUND=0
+
+for SELECTED in "${NEW_ACTIVE[@]}"; do
+
+    if [ "$SUBJECT_NAME" = "$SELECTED" ]; then
+        FOUND=1
+        break
+    fi
+
+done
+
+if [ "$FOUND" -eq 0 ]; then
+    REMAINING+=("$SUBJECT_NAME")
+fi
+
+done
+
+FINAL_ACTIVE=("${NEW_ACTIVE[@]}" "${REMAINING[@]}")
 
 echo
-echo "You entered: $NEW_FOCUS"
+echo "New Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    echo "$((i + 1))) ${FINAL_ACTIVE[$i]}"
+
+done
 echo
 
 read -r -p "Press ENTER to return..."

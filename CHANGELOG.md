@@ -24,6 +24,8 @@ Version 15.5-dev
 - Established architecture foundation for completion tracking
 - Established architecture foundation for subject progression UX
 - Added visual workflow separation using clear transitions
+- Added dynamic focus-subject reordering preview system
+- Added runtime-aware subject priority rendering
 
 UX Impact:
 
