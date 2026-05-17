@@ -23,6 +23,7 @@ Version 15.5-dev
 - Preserved distraction-free startup workflow philosophy
 - Established architecture foundation for completion tracking
 - Established architecture foundation for subject progression UX
+- Added visual workflow separation using clear transitions
 
 UX Impact:
 

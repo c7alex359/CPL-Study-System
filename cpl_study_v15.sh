@@ -768,7 +768,7 @@ exec "$0"
 ;;
 
 c)
-
+clear
 echo
 echo "===================================="
 echo "         SETTINGS MENU"
@@ -778,8 +778,54 @@ echo "1) Change focus subjects"
 echo "2) Change timer settings"
 echo "3) Log maintenance"
 echo
+read -r -p "Enter selection: " SETTINGS_CHOICE
+case "$SETTINGS_CHOICE" in
+
+1)
+clear
+echo
+echo "===================================="
+echo "     CHANGE FOCUS SUBJECTS"
+echo "===================================="
+echo
+
+echo "Current Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    SUBJECT_NAME="${ACTIVE_LINES[$i]}"
+
+    echo "$((i + 1))) $SUBJECT_NAME"
+
+done
+
+echo
+echo "Enter subjects in desired focus order."
+echo
+echo "Example:"
+echo "1 3 5 7"
+echo
+echo "The number of selected subjects defines"
+echo "the primary startup menu size."
+echo
+
+read -r -p "Enter focus subjects: " NEW_FOCUS
+
+echo
+echo "You entered: $NEW_FOCUS"
+echo
+
 read -r -p "Press ENTER to return..."
 exec "$0"
+;;
+
+*)
+
+exec "$0"
+;;
+
+esac
 ;;
 
 l)
