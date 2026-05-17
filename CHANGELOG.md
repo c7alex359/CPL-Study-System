@@ -18,7 +18,6 @@ Version 15.5-dev
 - Added post-session operational navigation menu
 - Added Settings menu framework
 - Added progression workflow entry points
-- Added completed-subject workflow shell
 - Introduced Log Maintenance terminology
 - Preserved distraction-free startup workflow philosophy
 - Established architecture foundation for completion tracking
@@ -32,6 +31,11 @@ Version 15.5-dev
 - Added runtime persistence for primary menu sizing
 - Added confirmation-based configuration mutation workflow
 - Validated runtime reconfiguration through clean-user deployment testing
+- Added completed_subjects.conf registry foundation
+- Added completed subject persistence workflow
+- Added duplicate-safe completed subject validation
+- Added actual elapsed timer accounting across review phases
+- Refined explicit four-mode runtime handling symmetry
 
 UX Impact:
 

@@ -17,10 +17,12 @@ SCRIPT_DIR="$(dirname "$0")"
 SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
 ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
 PRIMARY_COUNT_FILE="$SCRIPT_DIR/config/primary_subject_count.conf"
+COMPLETED_SUBJECTS="$SCRIPT_DIR/config/completed_subjects.conf"
 
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
+touch "$COMPLETED_SUBJECTS"
 
 ########################################
 # CREATE CSV IF MISSING
@@ -940,12 +942,87 @@ exec "$0"
 
 e)
 
+clear
+
 echo
-echo "Completed subject workflow"
-echo "coming in future version."
+echo "===================================="
+echo "    COMPLETED EXAM SUBJECTS"
+echo "===================================="
 echo
 
-read -r -p "Press ENTER to return..."
+NEW_COMPLETIONS=()
+
+while true; do
+
+echo "Current Active Subjects:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+    echo "$((i + 1))) ${ACTIVE_LINES[$i]}"
+done
+
+echo
+read -r -p "Enter completed subject number: " COMPLETE_NUM
+
+if [[ ! "$COMPLETE_NUM" =~ ^[0-9]+$ ]]; then
+    echo
+    echo "Invalid selection."
+    echo
+    continue
+fi
+
+INDEX=$((COMPLETE_NUM - 1))
+
+if [ "$INDEX" -lt 0 ] || \
+   [ "$INDEX" -ge "$TOTAL_SUBJECTS" ]; then
+
+    echo
+    echo "Invalid selection."
+    echo
+    continue
+
+fi
+
+COMPLETED_SUBJECT="${ACTIVE_LINES[$INDEX]}"
+
+if grep -q "^${COMPLETED_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
+
+    echo
+    echo "$COMPLETED_SUBJECT already logged as completed."
+    echo
+    continue
+
+fi
+
+echo
+read -r -p "Enter final score achieved: " FINAL_SCORE
+
+if [[ ! "$FINAL_SCORE" =~ ^[0-9]+$ ]] || \
+   [ "$FINAL_SCORE" -lt 75 ] || \
+   [ "$FINAL_SCORE" -gt 100 ]; then
+
+    echo
+    echo "Score must be between 75 and 100."
+    echo
+    continue
+
+fi
+
+echo "${COMPLETED_SUBJECT}|${FINAL_SCORE}" >> "$COMPLETED_SUBJECTS"
+
+NEW_COMPLETIONS+=("${COMPLETED_SUBJECT}|${FINAL_SCORE}")
+
+echo
+echo "$COMPLETED_SUBJECT recorded successfully."
+echo
+
+read -r -p "Add another completed subject? (y/n): " ADD_ANOTHER
+
+[ "$ADD_ANOTHER" != "y" ] && break
+
+done
+
+read -r -p "Press ENTER to continue..."
 exec "$0"
 ;;
 
