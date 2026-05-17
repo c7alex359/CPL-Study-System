@@ -26,6 +26,12 @@ Version 15.5-dev
 - Added visual workflow separation using clear transitions
 - Added dynamic focus-subject reordering preview system
 - Added runtime-aware subject priority rendering
+- Added persistent runtime focus-subject reconfiguration
+- Added duplicate-safe focus subject selection handling
+- Added dynamic active_subjects.conf rewriting
+- Added runtime persistence for primary menu sizing
+- Added confirmation-based configuration mutation workflow
+- Validated runtime reconfiguration through clean-user deployment testing
 
 UX Impact:
 
@@ -43,6 +49,15 @@ Operational Status:
 
 Stable development milestone — validated through
 live session execution and workflow testing.
+
+Known Development Observations:
+
+- Review phases currently log configured review
+  allocation rather than actual elapsed review time
+
+- Rapid first-run deployment testing exposed
+  a possible session-counter initialization edge case
+  during immediate sequential test sessions
 
 ==================================================
 Version 15.4-dev

@@ -869,6 +869,17 @@ fi
 
 done
 
+if [ "${#NEW_ACTIVE[@]}" -eq 0 ]; then
+
+echo
+echo "No valid subjects selected."
+echo
+
+read -r -p "Press ENTER to continue..."
+exec "$0"
+
+fi
+
 FINAL_ACTIVE=("${NEW_ACTIVE[@]}" "${REMAINING[@]}")
 
 echo
@@ -882,7 +893,31 @@ for ((i=0; i<TOTAL_SUBJECTS; i++)); do
 done
 echo
 
-read -r -p "Press ENTER to return..."
+echo
+read -r -p "Confirm new subject priority? (y/n): " CONFIRM_SUBJECTS
+
+if [ "$CONFIRM_SUBJECTS" = "y" ]; then
+
+    printf "%s\n" "${FINAL_ACTIVE[@]}" > "$ACTIVE_SUBJECTS"
+
+    echo "${#NEW_ACTIVE[@]}" > "$PRIMARY_COUNT_FILE"
+
+    echo
+    echo "Focus subjects updated successfully."
+    echo
+    echo "Primary startup menu now displays:"
+    echo "${#NEW_ACTIVE[@]} subjects."
+    echo
+
+else
+
+    echo
+    echo "Changes discarded."
+    echo
+
+fi
+
+read -r -p "Press ENTER to continue..."
 exec "$0"
 ;;
 
