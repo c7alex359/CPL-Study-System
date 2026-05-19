@@ -1057,8 +1057,126 @@ read -r -p "Add another completed subject? (y/n): " ADD_ANOTHER
 
 done
 
+TOTAL_COMPLETED=$(wc -l < "$COMPLETED_SUBJECTS")
+
+REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
+
+clear
+
+echo
+echo "===================================="
+echo "         CONGRATULATIONS"
+echo "===================================="
+echo
+echo "You passed:"
+echo
+
+for ((i=0; i<${#NEW_COMPLETIONS[@]}; i++)); do
+
+    ENTRY="${NEW_COMPLETIONS[$i]}"
+
+    SUBJECT_NAME=$(echo "$ENTRY" | cut -d'|' -f1)
+    SUBJECT_SCORE=$(echo "$ENTRY" | cut -d'|' -f2)
+
+    echo "$((i + 1))) ${CHECKMARK} ${SUBJECT_NAME} @ ${SUBJECT_SCORE}%"
+
+done
+
+echo
+echo "You now have only ${REMAINING_EXAMS} exams left."
+echo
+
+echo "What would you like to do?"
+echo
+echo "1) Keep completed subjects visible"
+echo "2) Move completed subjects to bottom"
+echo "3) Hide completed subjects (coming soon)"
+echo
+
+read -r -p "Enter selection: " VISIBILITY_CHOICE
+
+case "$VISIBILITY_CHOICE" in
+
+1)
+
+echo
+echo "Completed subjects will remain visible."
+echo
+
 read -r -p "Press ENTER to continue..."
 exec "$0"
+;;
+
+2)
+
+VISIBLE_SUBJECTS=()
+COMPLETED_LIST=()
+
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
+
+    if grep -Fq "${SUBJECT_NAME}|" "$COMPLETED_SUBJECTS"; then
+
+        COMPLETED_LIST+=("$SUBJECT_NAME")
+
+    else
+
+        VISIBLE_SUBJECTS+=("$SUBJECT_NAME")
+
+    fi
+
+done
+
+FINAL_ACTIVE=("${VISIBLE_SUBJECTS[@]}" "${COMPLETED_LIST[@]}")
+
+echo
+echo "New Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    display_subject "$((i + 1))" "${FINAL_ACTIVE[$i]}"
+
+done
+
+echo
+
+read -r -p "Confirm new visibility order? (y/n): " CONFIRM_MOVE
+
+if [ "$CONFIRM_MOVE" = "y" ]; then
+
+    printf "%s\n" "${FINAL_ACTIVE[@]}" > "$ACTIVE_SUBJECTS"
+
+    echo
+    echo "Completed subjects moved successfully."
+    echo
+
+else
+
+    echo
+    echo "Changes discarded."
+    echo
+
+fi
+
+read -r -p "Press ENTER to continue..."
+exec "$0"
+;;
+
+3)
+
+echo
+echo "Hide completed subjects coming soon."
+echo
+
+read -r -p "Press ENTER to continue..."
+exec "$0"
+;;
+
+*)
+
+exec "$0"
+;;
+esac
 ;;
 
 q)

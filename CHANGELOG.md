@@ -47,6 +47,12 @@ Version 15.5-dev
 - Established completed_subjects.conf as rendering authority
 - Hardened completion-state persistence across subject reordering
 
+- Added post-exam completion summary workflow
+- Added remaining-exam progression tracking
+- Added visibility-aware completed subject handling
+- Added safe move-to-bottom progression ordering
+- Added preview-confirmation workflow for visibility mutation
+
 UX Impact:
 
 Major — system workflow now extends beyond
