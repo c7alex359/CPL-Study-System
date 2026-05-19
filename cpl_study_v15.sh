@@ -52,8 +52,8 @@ REVIEW_ENDURANCE_MIN=20
 EXTEND_MIN=5
 BAR_WIDTH=30
 
-GREEN='\033[0;32m'
-NC='\033[0m'
+GREEN=$(tput setaf 2)
+NC=$(tput sgr0)
 CHECKMARK="${GREEN}✓${NC}"
 
 ########################################
