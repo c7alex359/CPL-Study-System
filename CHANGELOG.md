@@ -42,6 +42,11 @@ Version 15.5-dev
 - Established architecture foundation for subject progression UX
 - Added visual workflow separation using clear transitions
 
+- Added centralized completion-aware subject rendering
+- Added persistent checkmark-based progression indicators
+- Established completed_subjects.conf as rendering authority
+- Hardened completion-state persistence across subject reordering
+
 UX Impact:
 
 Major — system workflow now extends beyond

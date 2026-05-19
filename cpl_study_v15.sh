@@ -52,6 +52,10 @@ REVIEW_ENDURANCE_MIN=20
 EXTEND_MIN=5
 BAR_WIDTH=30
 
+GREEN='\033[0;32m'
+NC='\033[0m'
+CHECKMARK="${GREEN}✓${NC}"
+
 ########################################
 
 clear
@@ -60,6 +64,27 @@ echo "===================================="
 echo "         CPL STUDY SESSION"
 echo "===================================="
 echo
+
+########################################
+# SUBJECT DISPLAY HELPER
+########################################
+
+display_subject() {
+
+DISPLAY_INDEX=$1
+DISPLAY_SUBJECT=$2
+
+if grep -Fq "${DISPLAY_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
+
+    echo "${DISPLAY_INDEX}) ${CHECKMARK} ${DISPLAY_SUBJECT}"
+
+else
+
+    echo "${DISPLAY_INDEX}) ${DISPLAY_SUBJECT}"
+
+fi
+
+}
 
 ########################################
 # SUBJECT
@@ -80,7 +105,7 @@ for ((i=0; i<PRIMARY_SUBJECT_COUNT && i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
-echo "$((i + 1))) $SUBJECT_NAME"
+    display_subject "$((i + 1))" "$SUBJECT_NAME"
 
 done
 
@@ -124,7 +149,7 @@ for ((i=PRIMARY_SUBJECT_COUNT; i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
-echo "$((i + 1))) $SUBJECT_NAME"
+    display_subject "$((i + 1))" "$SUBJECT_NAME"
 
 done
 
@@ -804,7 +829,7 @@ for ((i=0; i<TOTAL_SUBJECTS; i++)); do
 
     SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
-    echo "$((i + 1))) $SUBJECT_NAME"
+    display_subject "$((i + 1))" "$SUBJECT_NAME"
 
 done
 
@@ -896,7 +921,7 @@ echo
 
 for ((i=0; i<TOTAL_SUBJECTS; i++)); do
 
-    echo "$((i + 1))) ${FINAL_ACTIVE[$i]}"
+    display_subject "$((i + 1))" "${FINAL_ACTIVE[$i]}"
 
 done
 echo
@@ -968,7 +993,7 @@ echo "Current Active Subjects:"
 echo
 
 for ((i=0; i<TOTAL_SUBJECTS; i++)); do
-    echo "$((i + 1))) ${ACTIVE_LINES[$i]}"
+    display_subject "$((i + 1))" "${ACTIVE_LINES[$i]}"
 done
 
 echo
@@ -995,7 +1020,7 @@ fi
 
 COMPLETED_SUBJECT="${ACTIVE_LINES[$INDEX]}"
 
-if grep -q "^${COMPLETED_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
+if grep -Fq "${COMPLETED_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
 
     echo
     echo "$COMPLETED_SUBJECT already logged as completed."
