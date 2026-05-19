@@ -20,9 +20,7 @@ Version 15.5-dev
 - Added progression workflow entry points
 - Introduced Log Maintenance terminology
 - Preserved distraction-free startup workflow philosophy
-- Established architecture foundation for completion tracking
-- Established architecture foundation for subject progression UX
-- Added visual workflow separation using clear transitions
+
 - Added dynamic focus-subject reordering preview system
 - Added runtime-aware subject priority rendering
 - Added persistent runtime focus-subject reconfiguration
@@ -31,11 +29,18 @@ Version 15.5-dev
 - Added runtime persistence for primary menu sizing
 - Added confirmation-based configuration mutation workflow
 - Validated runtime reconfiguration through clean-user deployment testing
-- Added completed_subjects.conf registry foundation
-- Added completed subject persistence workflow
-- Added duplicate-safe completed subject validation
-- Added actual elapsed timer accounting across review phases
+
+- Added completed_subjects.conf persistence foundation
+- Added completed subject validation workflow
+- Added duplicate-safe completed subject protection
+- Added actual elapsed review-time accounting
 - Refined explicit four-mode runtime handling symmetry
+- Added post-session pacing confirmation step
+- Improved completed-subject terminal redraw behavior
+
+- Established architecture foundation for completion tracking
+- Established architecture foundation for subject progression UX
+- Added visual workflow separation using clear transitions
 
 UX Impact:
 
@@ -45,9 +50,9 @@ and operational study management.
 
 Architectural Impact:
 
-Moderate — introduced post-session orchestration
-layer without altering stable runtime execution
-architecture.
+Moderate — introduced persistent progression
+and orchestration architecture without altering
+stable runtime execution behavior.
 
 Operational Status:
 

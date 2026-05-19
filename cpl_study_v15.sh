@@ -3,7 +3,7 @@
 # ====================================
 # CPL Study System
 # Version 15.5-dev
-# Last Updated: 2026-05-17
+# Last Updated: 2026-05-19
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -750,6 +750,8 @@ echo
 
 tput cnorm
 
+read -r -p "Press ENTER to continue..."
+
 ########################################
 # POST-SESSION OPTIONS
 ########################################
@@ -953,6 +955,14 @@ echo
 NEW_COMPLETIONS=()
 
 while true; do
+
+clear
+
+echo
+echo "===================================="
+echo "    COMPLETED EXAM SUBJECTS"
+echo "===================================="
+echo
 
 echo "Current Active Subjects:"
 echo
