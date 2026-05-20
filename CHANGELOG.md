@@ -65,8 +65,9 @@ and runtime-safe progression mutation workflows.
 Operational Status:
 
 Stable development milestone — validated through
-clean-user deployment testing, persistent runtime
-verification, and multi-session progression testing.
+clean-user deployment testing, iterative runtime
+verification, submenu continuity testing, and
+multi-session progression validation.
 
 ==================================================
 Version 15.5-dev

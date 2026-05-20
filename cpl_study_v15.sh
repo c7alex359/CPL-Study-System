@@ -781,6 +781,8 @@ tput cnorm
 
 read -r -p "Press ENTER to continue..."
 
+clear
+
 ########################################
 # POST-SESSION OPTIONS
 ########################################
@@ -953,9 +955,11 @@ if [ "$CONFIRM_SUBJECTS" = "y" ]; then
 
     read -r -p "Press ENTER to continue..."
 
-    break
+    exec "$0"
 
 else
+
+    clear
 
     while true; do
 
