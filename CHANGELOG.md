@@ -39,7 +39,15 @@ Version 15.6-dev
 
 - Refined additional-subject navigation consistency
 - Eliminated invalid-selection redraw during subject-menu return flow
-- Improved runtime workflow continuity through live validation testing
+- Improved runtime workflow continuity through iterative live validation testing
+
+- Introduced local submenu continuity architecture
+- Eliminated forced restart behavior after rejected focus-subject previews
+- Added reconsideration workflow for focus-subject reconfiguration
+- Added settings-context preservation during configuration mutation
+- Refined semantic capitalization consistency across CLI interaction layers
+- Standardized Title Case for interactive navigation structures
+- Standardized sentence case for runtime-state feedback messaging
 
 UX Impact:
 

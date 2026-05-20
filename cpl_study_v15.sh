@@ -788,10 +788,10 @@ read -r -p "Press ENTER to continue..."
 echo
 echo "What would you like to do?"
 echo
-echo "r) Return to main menu"
-echo "c) Change settings"
-echo "l) View latest log entry"
-echo "e) Log completed exam subjects"
+echo "r) Return to Main Menu"
+echo "c) Change Settings"
+echo "l) View Latest Log Entry"
+echo "e) Log Completed Exam Subjects"
 echo "q) Quit"
 echo
 
@@ -805,20 +805,25 @@ exec "$0"
 ;;
 
 c)
+while true; do
+
 clear
 echo
 echo "===================================="
 echo "         SETTINGS MENU"
 echo "===================================="
 echo
-echo "1) Change focus subjects"
-echo "2) Change timer settings"
-echo "3) Log maintenance"
+echo "1) Change Focus Subjects"
+echo "2) Change Timer Settings"
+echo "3) Log Maintenance"
 echo
 read -r -p "Enter selection: " SETTINGS_CHOICE
 case "$SETTINGS_CHOICE" in
 
 1)
+
+while true; do
+
 clear
 echo
 echo "===================================="
@@ -931,7 +936,7 @@ done
 echo
 
 echo
-read -r -p "Confirm new subject priority? (y/n): " CONFIRM_SUBJECTS
+read -r -p "Confirm New Subject Priority? (y/n): " CONFIRM_SUBJECTS
 
 if [ "$CONFIRM_SUBJECTS" = "y" ]; then
 
@@ -946,17 +951,58 @@ if [ "$CONFIRM_SUBJECTS" = "y" ]; then
     echo "${#NEW_ACTIVE[@]} subjects."
     echo
 
+    read -r -p "Press ENTER to continue..."
+
+    break
+
 else
 
-    echo
-    echo "Changes discarded."
-    echo
+    while true; do
+
+        echo
+        echo "Changes discarded."
+        echo
+        echo "1) Reconsider Subject Selection"
+        echo "2) Return to Settings Menu"
+        echo "3) Return to Main Menu"
+        echo
+
+        read -r -p "Enter selection: " REJECT_CHOICE
+
+        case "$REJECT_CHOICE" in
+
+        1)
+
+            break
+            ;;
+
+        2)
+
+            break 2
+            ;;
+
+        3)
+
+            exec "$0"
+            ;;
+
+        *)
+
+            echo
+            echo "Invalid selection."
+            ;;
+
+        esac
+
+    done
+
+    continue
 
 fi
 
-read -r -p "Press ENTER to continue..."
-exec "$0"
-;;
+done
+
+;; 
 
 *)
 
@@ -964,6 +1010,9 @@ exec "$0"
 ;;
 
 esac
+
+done
+
 ;;
 
 l)
@@ -1092,9 +1141,9 @@ echo
 
 echo "What would you like to do?"
 echo
-echo "1) Keep completed subjects visible"
-echo "2) Move completed subjects to bottom"
-echo "3) Hide completed subjects (coming soon)"
+echo "1) Keep Completed Subjects Visible"
+echo "2) Move Completed Subjects to Bottom"
+echo "3) Hide Completed Subjects (Coming Soon)"
 echo
 
 read -r -p "Enter selection: " VISIBILITY_CHOICE
@@ -1144,7 +1193,7 @@ done
 
 echo
 
-read -r -p "Confirm new visibility order? (y/n): " CONFIRM_MOVE
+read -r -p "Confirm New Visibility Order? (y/n): " CONFIRM_MOVE
 
 if [ "$CONFIRM_MOVE" = "y" ]; then
 
@@ -1169,7 +1218,7 @@ exec "$0"
 3)
 
 echo
-echo "Hide completed subjects coming soon."
+echo "Completed-subject hiding will be available soon."
 echo
 
 read -r -p "Press ENTER to continue..."
