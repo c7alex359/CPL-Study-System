@@ -10,6 +10,57 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.6-dev
+2026-05-20
+==================================================
+
+- Introduced persistent progression-state architecture
+- Added completed-subject semantic persistence
+- Added centralized completion-aware subject rendering
+- Added persistent checkmark-based progression indicators
+- Added post-exam completion summary workflow
+- Added remaining-exam progression tracking
+- Added visibility-aware completed subject handling
+- Added safe move-to-bottom progression ordering
+- Added preview-confirmation workflow for visibility mutation
+
+- Added duplicate-safe completed-subject protection
+- Hardened completion-state persistence across subject reordering
+- Preserved progression-state integrity during runtime reconfiguration
+- Added completed_subjects.conf rendering authority layer
+
+- Added actual elapsed review-time accounting
+- Refined explicit four-mode runtime handling symmetry
+- Added post-session pacing confirmation workflow
+
+- Added automatic CSV header validation and recovery
+- Hardened global session counter reliability across clean-user deployments
+- Improved terminal portability using capability-aware color rendering
+
+- Refined additional-subject navigation consistency
+- Eliminated invalid-selection redraw during subject-menu return flow
+- Improved runtime workflow continuity through live validation testing
+
+UX Impact:
+
+Major — system workflow now extends beyond
+individual session execution into persistent
+long-term progression tracking and operational
+study continuity.
+
+Architectural Impact:
+
+Major — introduced persistent semantic progression
+state, visibility-aware rendering orchestration,
+and runtime-safe progression mutation workflows.
+
+Operational Status:
+
+Stable development milestone — validated through
+clean-user deployment testing, persistent runtime
+verification, and multi-session progression testing.
+
+==================================================
 Version 15.5-dev
 2026-05-17
 ==================================================

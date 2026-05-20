@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.5-dev
-# Last Updated: 2026-05-19
+# Version 15.6-dev
+# Last Updated: 2026-05-20
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -28,8 +28,17 @@ touch "$COMPLETED_SUBJECTS"
 # CREATE CSV IF MISSING
 ########################################
 
-if [ ! -f "$LOGCSV" ]; then
-echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes" >> "$LOGCSV"
+if [ ! -f "$LOGCSV" ] || \
+   ! head -n 1 "$LOGCSV" | grep -q "^session,"; then
+
+echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes" > "$LOGCSV.tmp"
+
+if [ -f "$LOGCSV" ]; then
+cat "$LOGCSV" >> "$LOGCSV.tmp"
+fi
+
+mv "$LOGCSV.tmp" "$LOGCSV"
+
 fi
 
 ########################################
@@ -155,9 +164,15 @@ done
 
 echo
 echo "0) Back to Main Subjects"
-
 echo
 read -r -p "Enter number: " SUBJECT_NUM
+
+if [ "$SUBJECT_NUM" = "0" ]; then
+    echo
+    echo "Returning to main subjects..."
+    sleep 1
+    exec "$0"
+fi
 
 if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
    [ "$SUBJECT_NUM" -gt "$PRIMARY_SUBJECT_COUNT" ] && \
@@ -175,17 +190,6 @@ sleep 1
 exec "$0"
 
 fi
-
-case $SUBJECT_NUM in
-
-0)
-echo
-echo "Returning to main subjects..."
-sleep 1
-exec "$0"
-;;
-
-esac
 
 ;;
 
