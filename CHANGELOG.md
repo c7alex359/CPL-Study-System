@@ -10,6 +10,22 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7-dev
+2026-05-21
+==================================================
+
+- Introduced persistent Post-Session operational hub
+- Added draw_header() global environment rendering
+- Established visual hierarchy between application identity and operational submenus
+- Added Timer Settings and Log Maintenance submenu stubs
+- Improved settings-menu continuity and reconsideration workflows
+- Reduced unexpected startup-menu returns
+- Refined completed-subject progression handling
+- Improved submenu semantic consistency
+- Added future CPL SYSTEM superstructure roadmap architecture
+- Stabilized runtime navigation behavior after configuration changes
+
+==================================================
 Version 15.6-dev
 2026-05-20
 ==================================================

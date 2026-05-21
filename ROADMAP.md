@@ -9,7 +9,7 @@ Stable Release:
 v14.3.2
 
 Current Development Branch:
-v15.4-dev
+v15.7-dev
 
 Stable Release Status:
 Production Stable — Multi-Log System Verified
@@ -394,6 +394,120 @@ Expected Outcome:
 
 User-adaptive workflow initialization.
 
+==================================================
+FUTURE SYSTEM SUPERSTRUCTURE
+==================================================
+
+Long-Term Architectural Direction:
+
+The CPL Study System is evolving toward
+a multi-layer terminal-native architecture
+that separates:
+
+- active study execution
+from:
+- operational configuration and reflection
+
+This transition aims to improve:
+
+- cognitive focus
+- workflow clarity
+- operational continuity
+- long-term extensibility
+- psychological separation of work states
+
+Planned High-Level Structure:
+
+1) cpl_system.sh
+--------------------------------
+
+Purpose:
+
+Global application entrypoint and
+system orchestration layer.
+
+Responsibilities:
+
+- Main system navigation
+- Runtime environment initialization
+- Branch selection
+- Cross-environment orchestration
+
+This layer functions as the:
+
+"CPL STUDY SYSTEM"
+
+application shell.
+
+
+2) cpl_study.sh
+--------------------------------
+
+Purpose:
+
+Dedicated deep-work study environment.
+
+Responsibilities:
+
+- Timed study execution
+- Exam simulation workflows
+- Session timing awareness
+- Notes and reflection capture
+- Performance logging
+- Cognitive immersion workflows
+
+Design Philosophy:
+
+Minimal operational interruption during
+active learning and exam preparation.
+
+
+3) cpl_config.sh
+--------------------------------
+
+Purpose:
+
+Operational configuration and progression
+management environment.
+
+Responsibilities:
+
+- Focus-subject management
+- Completed-subject workflows
+- Runtime configuration
+- Reporting and analytics
+- Progress tracking
+- Future import/export tooling
+- Visibility management
+- Long-term study orchestration
+
+Design Philosophy:
+
+Separate reflective and administrative
+workflows from active study execution.
+
+
+Architectural Goal:
+
+Create a terminal-native learning system
+with clear psychological separation between:
+
+- execution
+and:
+- reflection
+
+while preserving:
+
+- simplicity
+- portability
+- Bash-native compatibility
+- offline-first reliability
+
+Current Status:
+
+Architectural vision established.
+Implementation deferred until
+workflow stabilization matures further.
 
 ==================================================
 LONG-TERM VISION

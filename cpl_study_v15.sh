@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.6-dev
-# Last Updated: 2026-05-20
+# Version 15.7-dev
+# Last Updated: 2026-05-21
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -65,7 +65,7 @@ GREEN=$(tput setaf 2)
 NC=$(tput sgr0)
 CHECKMARK="${GREEN}✓${NC}"
 
-########################################
+draw_header() {
 
 clear
 
@@ -73,6 +73,12 @@ echo "===================================="
 echo "         CPL STUDY SESSION"
 echo "===================================="
 echo
+
+}
+
+########################################
+
+draw_header
 
 ########################################
 # SUBJECT DISPLAY HELPER
@@ -206,12 +212,8 @@ echo
 echo "Selected: $SUBJECT"
 sleep 1
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo
 echo
@@ -241,12 +243,8 @@ echo
 echo "Selected Mode: $MODE_NAME"
 sleep 1
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo "Mode: $MODE_NAME"
 echo
@@ -273,12 +271,8 @@ sleep 1
 done
 echo
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo "Mode: $MODE_NAME"
 echo
@@ -781,7 +775,9 @@ tput cnorm
 
 read -r -p "Press ENTER to continue..."
 
-clear
+while true; do
+
+draw_header
 
 ########################################
 # POST-SESSION OPTIONS
@@ -809,11 +805,9 @@ exec "$0"
 c)
 while true; do
 
-clear
+draw_header
 echo
-echo "===================================="
-echo "         SETTINGS MENU"
-echo "===================================="
+echo "--- Settings Menu ---"
 echo
 echo "1) Change Focus Subjects"
 echo "2) Change Timer Settings"
@@ -826,11 +820,9 @@ case "$SETTINGS_CHOICE" in
 
 while true; do
 
-clear
+draw_header
 echo
-echo "===================================="
-echo "     CHANGE FOCUS SUBJECTS"
-echo "===================================="
+echo "--- Change Focus Subjects ---"
 echo
 
 echo "Current Subject Priority:"
@@ -915,12 +907,48 @@ done
 
 if [ "${#NEW_ACTIVE[@]}" -eq 0 ]; then
 
-echo
-echo "No valid subjects selected."
-echo
+    draw_header
 
-read -r -p "Press ENTER to continue..."
-exec "$0"
+    while true; do
+
+        echo
+        echo "No subjects selected."
+        echo
+	echo "1) Reconsider Subject Selection"
+	echo "2) Return to Settings Menu"
+	echo "3) Return to Post-Session Menu"
+        echo
+
+        read -r -p "Enter selection: " EMPTY_SELECTION_CHOICE
+
+        case "$EMPTY_SELECTION_CHOICE" in
+
+        1)
+
+            break
+            ;;
+
+        2)
+
+            break 2
+            ;;
+
+        3)
+
+            break 3
+            ;;
+
+        *)
+
+            echo
+            echo "Invalid selection."
+            ;;
+
+        esac
+
+    done
+
+    continue
 
 fi
 
@@ -955,11 +983,11 @@ if [ "$CONFIRM_SUBJECTS" = "y" ]; then
 
     read -r -p "Press ENTER to continue..."
 
-    exec "$0"
+    break 2
 
 else
 
-    clear
+    draw_header
 
     while true; do
 
@@ -968,7 +996,7 @@ else
         echo
         echo "1) Reconsider Subject Selection"
         echo "2) Return to Settings Menu"
-        echo "3) Return to Main Menu"
+	echo "3) Return to Post-Session Menu"
         echo
 
         read -r -p "Enter selection: " REJECT_CHOICE
@@ -987,7 +1015,7 @@ else
 
         3)
 
-            exec "$0"
+            break 3
             ;;
 
         *)
@@ -1008,9 +1036,37 @@ done
 
 ;; 
 
+2)
+
+draw_header
+echo
+echo "--- Timer Settings ---"
+echo
+
+echo "Custom timer profiles will be available soon."
+echo
+
+read -r -p "Press ENTER to continue..."
+;;
+
+3)
+
+draw_header
+echo
+echo "--- Log Maintenance ---"
+echo
+
+echo "Log maintenance tools will be available soon."
+echo
+
+read -r -p "Press ENTER to continue..."
+;;
+
 *)
 
-exec "$0"
+echo
+echo "Invalid selection."
+sleep 1
 ;;
 
 esac
@@ -1021,12 +1077,11 @@ done
 
 l)
 less "$LOGTXT"
-exec "$0"
 ;;
 
 e)
 
-clear
+draw_header
 
 echo
 echo "===================================="
@@ -1038,7 +1093,7 @@ NEW_COMPLETIONS=()
 
 while true; do
 
-clear
+draw_header
 
 echo
 echo "===================================="
@@ -1118,7 +1173,7 @@ TOTAL_COMPLETED=$(wc -l < "$COMPLETED_SUBJECTS")
 
 REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
 
-clear
+draw_header
 
 echo
 echo "===================================="
@@ -1161,7 +1216,6 @@ echo "Completed subjects will remain visible."
 echo
 
 read -r -p "Press ENTER to continue..."
-exec "$0"
 ;;
 
 2)
@@ -1216,7 +1270,6 @@ else
 fi
 
 read -r -p "Press ENTER to continue..."
-exec "$0"
 ;;
 
 3)
@@ -1226,11 +1279,9 @@ echo "Completed-subject hiding will be available soon."
 echo
 
 read -r -p "Press ENTER to continue..."
-exec "$0"
 ;;
 
 *)
-
 exec "$0"
 ;;
 esac
@@ -1243,7 +1294,12 @@ exit
 ;;
 
 *)
-exec "$0"
+
+echo
+echo "Invalid selection."
+sleep 1
 ;;
 
 esac
+
+done
