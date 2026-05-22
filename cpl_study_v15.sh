@@ -1175,7 +1175,7 @@ REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
 
 if [ "$REMAINING_EXAMS" -eq 0 ]; then
 
-    draw_header
+    clear
 
     echo
     echo "===================================="
