@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7-dev
-# Last Updated: 2026-05-21
+# Version 15.7.1-dev
+# Last Updated: 2026-05-22
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -1172,6 +1172,36 @@ done
 TOTAL_COMPLETED=$(wc -l < "$COMPLETED_SUBJECTS")
 
 REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
+
+if [ "$REMAINING_EXAMS" -eq 0 ]; then
+
+    draw_header
+
+    echo
+    echo "===================================="
+    echo "     ALL EXAMS COMPLETED"
+    echo "===================================="
+    echo
+    echo "Congratulations on passing"
+    echo "all EASA CPL exams."
+    echo
+    echo "Thank you for using this CLI"
+    echo "developed by c7alex359."
+    echo
+    echo "If this tool helped you achieve"
+    echo "this milestone,"
+    echo "consider sharing it with others:"
+    echo "https://github.com/c7alex359/CPL-Study-System"
+    echo
+    echo "The skies welcome you fully."
+    echo "May their blessings be with you always. So long!"
+    echo
+
+    read -r -p "Press ENTER to close the system..."
+
+    exit
+
+fi
 
 draw_header
 
