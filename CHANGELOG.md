@@ -10,6 +10,51 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7.4-dev
+2026-05-25
+==================================================
+
+- Refined completed-subject hiding semantics
+- Hidden-subject visibility mode now derives
+  globally from all completed subjects
+- Eliminated incremental hidden-state accumulation behavior
+- Improved progression visibility coherence
+
+- Restored Post-Session Menu authority across
+  Timer Settings and Log Maintenance workflows
+- Eliminated submenu trapping behavior
+- Re-established stable operational return hierarchy
+
+- Refined previous-study-time integration UX
+- Added hh:mm formatted study-time input handling
+- Added minute-precision onboarding continuity support
+- Hardened arithmetic parsing using explicit decimal handling
+
+- Refined hidden-subject rebuild handling
+- Added ShellCheck-clean no-op redirection semantics
+- Preserved intentional multiline notes indentation architecture
+
+UX Impact:
+
+Moderate — operational configuration workflows
+now maintain stable navigation continuity while
+completed-subject visibility handling behaves
+as a globally coherent progression mode.
+
+Architectural Impact:
+
+Moderate — visibility-state semantics now derive
+from authoritative completion-state persistence
+rather than incremental interaction history.
+
+Operational Status:
+
+Runtime validated — hidden-subject rendering,
+normalized numbering, timer persistence,
+study-time integration, and submenu continuity
+verified during live execution testing.
+
+==================================================
 Version 15.7.3-dev
 2026-05-25
 ==================================================

@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7.3-dev
+# Version 15.7.4-dev
 # Last Updated: 2026-05-25
 #
 # Created by: c7alex359
@@ -1095,7 +1095,7 @@ while true; do
     echo
     echo "1) DEFAULT"
     echo "2) SPEED"
-    echo "3) Return to Settings Menu"
+    echo "3) Return to Post-Session Menu"
     echo
 
     read -r -p "Enter selection: " TIMER_CHOICE
@@ -1126,7 +1126,7 @@ while true; do
 
     3)
 
-        break
+        break 3
         ;;
 
     *)
@@ -1159,7 +1159,7 @@ while true; do
     echo
     echo "1) Add Previous Study Time"
     echo "2) Reset Previous Study Time"
-    echo "3) Return to Settings Menu"
+    echo "3) Return to Post-Session Menu"
     echo
 
     read -r -p "Enter selection: " LOG_CHOICE
@@ -1169,11 +1169,14 @@ while true; do
     1)
 
         echo
-        read -r -p "Enter previous study hours: " PREV_HOURS
+	read -r -p "Enter previous study time (hh:mm): " PREV_TIME
 
-        if [[ "$PREV_HOURS" =~ ^[0-9]+$ ]]; then
+	if [[ "$PREV_TIME" =~ ^([0-9]+):([0-5][0-9])$ ]]; then
 
-            PREV_MINUTES=$((PREV_HOURS * 60))
+	    HOURS="${BASH_REMATCH[1]}"
+	    MINUTES="${BASH_REMATCH[2]}"
+
+	    PREV_MINUTES=$((10#$HOURS * 60 + 10#$MINUTES))
 
             echo "$PREV_MINUTES" > "$PREVIOUS_STUDY_FILE"
 
@@ -1205,7 +1208,7 @@ while true; do
 
     3)
 
-        break
+        break 3
         ;;
 
     *)
@@ -1460,11 +1463,11 @@ read -r -p "Press ENTER to continue..."
 
 3)
 
-for ENTRY in "${NEW_COMPLETIONS[@]}"; do
+: > "$HIDDEN_SUBJECTS"
 
-    SUBJECT_NAME=$(echo "$ENTRY" | cut -d'|' -f1)
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
 
-    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+    if grep -Fq "${SUBJECT_NAME}|" "$COMPLETED_SUBJECTS"; then
 
         echo "$SUBJECT_NAME" >> "$HIDDEN_SUBJECTS"
 
