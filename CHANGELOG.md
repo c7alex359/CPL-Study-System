@@ -10,6 +10,46 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7.3-dev
+2026-05-25
+==================================================
+
+- Added persistent timer configuration architecture
+- Added DEFAULT and SPEED runtime pacing modes
+- Added timer_mode.conf persistent configuration layer
+- Added live timer-mode runtime awareness in settings
+- Replaced timer placeholder workflow with operational implementation
+
+- Added previous study time integration system
+- Added persistent previous_study_minutes.conf layer
+- Added onboarding-compatible cumulative study tracking
+- Added log-maintenance configuration workflow
+- Added reversible previous-study-time reset handling
+
+- Refined persistent configuration-state architecture
+- Expanded operational Settings subsystem maturity
+- Improved runtime environmental awareness and pacing control
+
+UX Impact:
+
+Moderate — Settings menu now contains
+fully operational pacing and progression
+continuity workflows rather than placeholder
+architecture.
+
+Architectural Impact:
+
+Moderate — introduced persistent runtime
+configuration-state handling distinct from
+accumulated progression-state persistence.
+
+Operational Status:
+
+Pending runtime validation — structurally
+integrated and ShellCheck-clean except for
+intentional sed indentation style warnings.
+
+==================================================
 Version 15.7.2-dev
 2026-05-25
 ==================================================

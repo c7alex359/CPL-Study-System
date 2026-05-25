@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7.2-dev
+# Version 15.7.3-dev
 # Last Updated: 2026-05-25
 #
 # Created by: c7alex359
@@ -19,12 +19,21 @@ ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
 PRIMARY_COUNT_FILE="$SCRIPT_DIR/config/primary_subject_count.conf"
 COMPLETED_SUBJECTS="$SCRIPT_DIR/config/completed_subjects.conf"
 HIDDEN_SUBJECTS="$SCRIPT_DIR/config/hidden_subjects.conf"
+TIMER_MODE_FILE="$SCRIPT_DIR/config/timer_mode.conf"
+PREVIOUS_STUDY_FILE="$SCRIPT_DIR/config/previous_study_minutes.conf"
 
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
 touch "$COMPLETED_SUBJECTS"
 touch "$HIDDEN_SUBJECTS"
+if [ ! -f "$TIMER_MODE_FILE" ]; then
+    echo "default" > "$TIMER_MODE_FILE"
+fi
+
+if [ ! -f "$PREVIOUS_STUDY_FILE" ]; then
+    echo "0" > "$PREVIOUS_STUDY_FILE"
+fi
 
 ########################################
 # CREATE CSV IF MISSING
@@ -47,7 +56,16 @@ fi
 # CONSTANTS
 ########################################
 
-TIME_PER_QUESTION=1.4
+TIMER_MODE=$(cat "$TIMER_MODE_FILE")
+if [ "$TIMER_MODE" = "speed" ]; then
+
+    TIME_PER_QUESTION=1.2
+
+else
+
+    TIME_PER_QUESTION=1.4
+
+fi
 
 DEFAULT_Q_FULL=35
 DEFAULT_Q_MOMENTUM=35
@@ -206,8 +224,7 @@ if [ "$SUBJECT_NUM" = "0" ]; then
 fi
 
 if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
-   [ "$SUBJECT_NUM" -gt "$PRIMARY_SUBJECT_COUNT" ] && \
-   [ "$SUBJECT_NUM" -le "$TOTAL_SUBJECTS" ]; then
+   [ -n "${VISIBLE_MAP[$SUBJECT_NUM]}" ]; then
 
 INDEX=${VISIBLE_MAP[$SUBJECT_NUM]}
 
@@ -655,6 +672,7 @@ END {print count+1}
 # TOTALS
 ########################################
 
+PREVIOUS_STUDY_MINUTES=$(cat "$PREVIOUS_STUDY_FILE")
 TOTAL_MINUTES=$(awk -F',' '
 NR>1 {
 if ($NF ~ /^[0-9]+$/)
@@ -671,7 +689,7 @@ sum+=$NF
 END {print sum}
 ' "$LOGCSV")
 
-NEW_TOTAL=$((TOTAL_MINUTES + SESSION_MINUTES))
+NEW_TOTAL=$((TOTAL_MINUTES + PREVIOUS_STUDY_MINUTES + SESSION_MINUTES))
 NEW_SUBJECT_TOTAL=$((SUBJECT_TOTAL_MINUTES + SESSION_MINUTES))
 
 ########################################
@@ -1063,28 +1081,141 @@ done
 
 2)
 
-draw_header
-echo
-echo "--- Timer Settings ---"
-echo
+while true; do
 
-echo "Custom timer profiles will be available soon."
-echo
+    draw_header
 
-read -r -p "Press ENTER to continue..."
+    echo
+    echo "--- Timer Settings ---"
+    echo
+
+    CURRENT_TIMER_MODE=$(cat "$TIMER_MODE_FILE")
+
+    echo "Current Timer Mode: ${CURRENT_TIMER_MODE^^}"
+    echo
+    echo "1) DEFAULT"
+    echo "2) SPEED"
+    echo "3) Return to Settings Menu"
+    echo
+
+    read -r -p "Enter selection: " TIMER_CHOICE
+
+    case "$TIMER_CHOICE" in
+
+    1)
+
+        echo "default" > "$TIMER_MODE_FILE"
+
+        echo
+        echo "Timer mode set to DEFAULT."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    2)
+
+        echo "speed" > "$TIMER_MODE_FILE"
+
+        echo
+        echo "Timer mode set to SPEED."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    3)
+
+        break
+        ;;
+
+    *)
+
+        echo
+        echo "Invalid selection."
+        ;;
+    esac
+
+done
 ;;
 
 3)
 
-draw_header
-echo
-echo "--- Log Maintenance ---"
-echo
+while true; do
 
-echo "Log maintenance tools will be available soon."
-echo
+    draw_header
 
-read -r -p "Press ENTER to continue..."
+    echo
+    echo "--- Log Maintenance ---"
+    echo
+
+    CURRENT_PREVIOUS_MINUTES=$(cat "$PREVIOUS_STUDY_FILE")
+
+    CURRENT_HOURS=$((CURRENT_PREVIOUS_MINUTES / 60))
+    CURRENT_MINUTES=$((CURRENT_PREVIOUS_MINUTES % 60))
+
+    echo "Previously Integrated Study Time:"
+    echo "${CURRENT_HOURS}h ${CURRENT_MINUTES}m"
+    echo
+    echo "1) Add Previous Study Time"
+    echo "2) Reset Previous Study Time"
+    echo "3) Return to Settings Menu"
+    echo
+
+    read -r -p "Enter selection: " LOG_CHOICE
+
+    case "$LOG_CHOICE" in
+
+    1)
+
+        echo
+        read -r -p "Enter previous study hours: " PREV_HOURS
+
+        if [[ "$PREV_HOURS" =~ ^[0-9]+$ ]]; then
+
+            PREV_MINUTES=$((PREV_HOURS * 60))
+
+            echo "$PREV_MINUTES" > "$PREVIOUS_STUDY_FILE"
+
+            echo
+            echo "Previous study time updated successfully."
+            echo
+
+        else
+
+            echo
+            echo "Invalid input."
+            echo
+
+        fi
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    2)
+
+        echo "0" > "$PREVIOUS_STUDY_FILE"
+
+        echo
+        echo "Previous study time reset successfully."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    3)
+
+        break
+        ;;
+
+    *)
+
+        echo
+        echo "Invalid selection."
+        ;;
+    esac
+
+done
 ;;
 
 *)
