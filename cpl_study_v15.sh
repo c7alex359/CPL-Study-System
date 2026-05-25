@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7.1-dev
-# Last Updated: 2026-05-22
+# Version 15.7.2-dev
+# Last Updated: 2026-05-25
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -18,11 +18,13 @@ SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
 ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
 PRIMARY_COUNT_FILE="$SCRIPT_DIR/config/primary_subject_count.conf"
 COMPLETED_SUBJECTS="$SCRIPT_DIR/config/completed_subjects.conf"
+HIDDEN_SUBJECTS="$SCRIPT_DIR/config/hidden_subjects.conf"
 
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
 touch "$COMPLETED_SUBJECTS"
+touch "$HIDDEN_SUBJECTS"
 
 ########################################
 # CREATE CSV IF MISSING
@@ -89,6 +91,10 @@ display_subject() {
 DISPLAY_INDEX=$1
 DISPLAY_SUBJECT=$2
 
+if grep -Fxq "$DISPLAY_SUBJECT" "$HIDDEN_SUBJECTS"; then
+    return
+fi
+
 if grep -Fq "${DISPLAY_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
 
     echo "${DISPLAY_INDEX}) ${CHECKMARK} ${DISPLAY_SUBJECT}"
@@ -116,11 +122,21 @@ fi
 TOTAL_SUBJECTS=${#ACTIVE_LINES[@]}
 
 echo "Select Subject:"
+VISIBLE_INDEX=1
+VISIBLE_MAP=()
 for ((i=0; i<PRIMARY_SUBJECT_COUNT && i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
-    display_subject "$((i + 1))" "$SUBJECT_NAME"
+    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+
+    display_subject "$VISIBLE_INDEX" "$SUBJECT_NAME"
+
+    VISIBLE_MAP[VISIBLE_INDEX]=$i
+
+    VISIBLE_INDEX=$((VISIBLE_INDEX + 1))
+
+fi
 
 done
 
@@ -131,10 +147,9 @@ echo
 read -r -p "Enter number: " SUBJECT_NUM
 
 if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
-   [ "$SUBJECT_NUM" -ge 1 ] && \
-   [ "$SUBJECT_NUM" -le "$PRIMARY_SUBJECT_COUNT" ]; then
+   [ -n "${VISIBLE_MAP[$SUBJECT_NUM]}" ]; then
 
-INDEX=$((SUBJECT_NUM - 1))
+INDEX=${VISIBLE_MAP[$SUBJECT_NUM]}
 
 SUBJECT="${ACTIVE_LINES[$INDEX]}"
 
@@ -160,11 +175,21 @@ fi
 echo
 echo "Additional Subjects:"
 echo
+VISIBLE_INDEX=1
+VISIBLE_MAP=()
 for ((i=PRIMARY_SUBJECT_COUNT; i<TOTAL_SUBJECTS; i++)); do
 
 SUBJECT_NAME="${ACTIVE_LINES[$i]}"
 
-    display_subject "$((i + 1))" "$SUBJECT_NAME"
+    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+
+    display_subject "$VISIBLE_INDEX" "$SUBJECT_NAME"
+
+    VISIBLE_MAP[VISIBLE_INDEX]=$i
+
+    VISIBLE_INDEX=$((VISIBLE_INDEX + 1))
+
+fi
 
 done
 
@@ -184,7 +209,7 @@ if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
    [ "$SUBJECT_NUM" -gt "$PRIMARY_SUBJECT_COUNT" ] && \
    [ "$SUBJECT_NUM" -le "$TOTAL_SUBJECTS" ]; then
 
-INDEX=$((SUBJECT_NUM - 1))
+INDEX=${VISIBLE_MAP[$SUBJECT_NUM]}
 
 SUBJECT="${ACTIVE_LINES[$INDEX]}"
 
@@ -1232,7 +1257,7 @@ echo "What would you like to do?"
 echo
 echo "1) Keep Completed Subjects Visible"
 echo "2) Move Completed Subjects to Bottom"
-echo "3) Hide Completed Subjects (Coming Soon)"
+echo "3) Hide Completed Subjects"
 echo
 
 read -r -p "Enter selection: " VISIBILITY_CHOICE
@@ -1304,8 +1329,20 @@ read -r -p "Press ENTER to continue..."
 
 3)
 
+for ENTRY in "${NEW_COMPLETIONS[@]}"; do
+
+    SUBJECT_NAME=$(echo "$ENTRY" | cut -d'|' -f1)
+
+    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+
+        echo "$SUBJECT_NAME" >> "$HIDDEN_SUBJECTS"
+
+    fi
+
+done
+
 echo
-echo "Completed-subject hiding will be available soon."
+echo "Completed subjects hidden successfully."
 echo
 
 read -r -p "Press ENTER to continue..."

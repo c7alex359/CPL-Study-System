@@ -10,6 +10,43 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7.2-dev
+2026-05-25
+==================================================
+
+- Introduced hidden_subjects.conf persistence layer
+- Added reversible completed-subject visibility filtering
+- Added centralized hidden-subject rendering control
+- Added normalized visible-subject numbering architecture
+- Added visible-to-internal subject index mapping
+- Refined subject-selection integrity under hidden-state filtering
+- Completed progression visibility-mode architecture
+
+- Refined final completion-state visual identity
+- Separated terminal completion-state rendering
+  from standard operational header environment
+- Improved lifecycle completion-state finality
+
+UX Impact:
+
+Major — progression visibility handling now
+supports visible, reordered, and fully hidden
+completed-subject workflows while preserving
+stable runtime navigation semantics.
+
+Architectural Impact:
+
+Major — introduced true visibility abstraction
+between rendered subject state and internal
+subject ordering architecture.
+
+Operational Status:
+
+Pending runtime validation — structurally
+integrated and ShellCheck-clean following
+hidden-state rendering and numbering refactor.
+
+==================================================
 Version 15.7.1-dev
 2026-05-22
 ==================================================
