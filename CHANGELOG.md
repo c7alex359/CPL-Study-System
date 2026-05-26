@@ -10,6 +10,58 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7.5-dev
+2026-05-26
+==================================================
+
+- Refined completed-subject visibility semantics
+- Established fully coherent ALL-visible /
+  ALL-hidden progression visibility behavior
+- Added hidden-state restoration during
+  move-to-bottom progression workflows
+- Improved progression visibility consistency
+  across all completion-state operations
+
+- Restored normalized additional-subject numbering
+- Re-established global visible-index continuity
+  between primary and additional subject menus
+
+- Refined Post-Session interaction pacing
+- Replaced instant single-key menu activation
+  with ENTER-confirmed operational selection flow
+- Improved interface grounding and transition stability
+
+- Refined Timer Settings submenu continuity
+- Restored stable return behavior to
+  Settings Menu and Post-Session operational hub
+- Improved runtime configuration navigation coherence
+
+- Increased SPEED timer pacing distinction
+- Improved visible operational differentiation
+  between DEFAULT and SPEED timer environments
+
+UX Impact:
+
+Moderate — runtime interaction flow now
+maintains calmer and more deliberate
+operational pacing while progression
+visibility semantics behave consistently
+across all visibility workflows.
+
+Architectural Impact:
+
+Low — refinement-focused release stabilizing
+existing progression, visibility, and runtime
+interaction architecture.
+
+Operational Status:
+
+Runtime validated — progression visibility,
+normalized numbering, timer persistence,
+submenu continuity, and operational menu
+interaction behavior verified during live usage.
+
+==================================================
 Version 15.7.4-dev
 2026-05-25
 ==================================================

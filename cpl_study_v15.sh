@@ -2,8 +2,8 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7.4-dev
-# Last Updated: 2026-05-25
+# Version 15.7.5-dev
+# Last Updated: 2026-05-26
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -59,7 +59,7 @@ fi
 TIMER_MODE=$(cat "$TIMER_MODE_FILE")
 if [ "$TIMER_MODE" = "speed" ]; then
 
-    TIME_PER_QUESTION=1.2
+    TIME_PER_QUESTION=1.0
 
 else
 
@@ -193,7 +193,7 @@ fi
 echo
 echo "Additional Subjects:"
 echo
-VISIBLE_INDEX=1
+VISIBLE_INDEX=$((PRIMARY_SUBJECT_COUNT + 1))
 VISIBLE_MAP=()
 for ((i=PRIMARY_SUBJECT_COUNT; i<TOTAL_SUBJECTS; i++)); do
 
@@ -836,7 +836,7 @@ echo "e) Log Completed Exam Subjects"
 echo "q) Quit"
 echo
 
-read -r -n 1 -p "Selection: " FINAL_CHOICE
+read -r -p "Selection: " FINAL_CHOICE
 echo
 
 case "$FINAL_CHOICE" in
@@ -1111,7 +1111,9 @@ while true; do
         echo
 
         read -r -p "Press ENTER to continue..."
-        ;;
+        
+	break
+	;;
 
     2)
 
@@ -1122,11 +1124,13 @@ while true; do
         echo
 
         read -r -p "Press ENTER to continue..."
-        ;;
+        
+	break
+	;;
 
     3)
 
-        break 3
+        break 2
         ;;
 
     *)
@@ -1208,7 +1212,7 @@ while true; do
 
     3)
 
-        break 3
+        break 2
         ;;
 
     *)
@@ -1400,6 +1404,8 @@ case "$VISIBILITY_CHOICE" in
 
 1)
 
+: > "$HIDDEN_SUBJECTS"
+
 echo
 echo "Completed subjects will remain visible."
 echo
@@ -1408,6 +1414,8 @@ read -r -p "Press ENTER to continue..."
 ;;
 
 2)
+
+: > "$HIDDEN_SUBJECTS"
 
 VISIBLE_SUBJECTS=()
 COMPLETED_LIST=()
