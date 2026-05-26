@@ -10,6 +10,46 @@ Current Stable Version:
 v14.3.2
 
 ==================================================
+Version 15.7.6-dev
+2026-05-26
+==================================================
+
+- Added canonical subject-order restoration workflow
+- Added runtime restoration of default EASA-style
+  syllabus ordering from subjects.db
+- Added reversible focus-subject experimentation support
+- Restored authoritative syllabus ordering semantics
+  within runtime configuration workflows
+
+- Added explicit Settings Menu return path
+- Improved Post-Session operational hierarchy clarity
+- Reduced navigation ambiguity during runtime configuration
+
+- Refined timer-settings operational continuity
+- Preserved stable submenu behavior while reducing
+  user-navigation uncertainty after timer changes
+
+UX Impact:
+
+Moderate — runtime configuration workflows now
+support reversible focus-priority experimentation
+while maintaining clearer operational navigation
+continuity and canonical syllabus recovery.
+
+Architectural Impact:
+
+Low — reinforced separation between canonical
+subject metadata authority and mutable runtime
+operational ordering state.
+
+Operational Status:
+
+Runtime validated — canonical subject restoration,
+timer configuration continuity, progression-state
+preservation, and post-session navigation behavior
+verified during live execution testing.
+
+==================================================
 Version 15.7.5-dev
 2026-05-26
 ==================================================

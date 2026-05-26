@@ -2,7 +2,7 @@
 
 # ====================================
 # CPL Study System
-# Version 15.7.5-dev
+# Version 15.7.6-dev
 # Last Updated: 2026-05-26
 #
 # Created by: c7alex359
@@ -855,6 +855,7 @@ echo
 echo "1) Change Focus Subjects"
 echo "2) Change Timer Settings"
 echo "3) Log Maintenance"
+echo "4) Return to Post-Session Menu"
 echo
 read -r -p "Enter selection: " SETTINGS_CHOICE
 case "$SETTINGS_CHOICE" in
@@ -888,8 +889,27 @@ echo
 echo "The number of selected subjects defines"
 echo "the primary startup menu size."
 echo
+echo "d = Restore Default Subject Order"
+echo
 
 read -r -p "Enter focus subjects: " NEW_FOCUS
+
+if [[ "$NEW_FOCUS" == "d" ]]; then
+
+    cp "$SUBJECT_DB" "$ACTIVE_SUBJECTS"
+
+    echo "5" > "$PRIMARY_COUNT_FILE"
+
+    echo
+    echo "Default subject order restored."
+    echo
+
+    read -r -p "Press ENTER to continue..."
+
+    break 2
+
+fi
+
 read -ra FOCUS_ARRAY <<< "$NEW_FOCUS"
 
 NEW_ACTIVE=()
@@ -1224,6 +1244,11 @@ while true; do
 
 done
 ;;
+
+4)
+
+    break
+    ;;
 
 *)
 
