@@ -25,10 +25,10 @@ Installation Steps:
 
 2. Navigate to this folder:
 
-cd CPL_Study_System_v15-dev
+cd CPL_Study_System_v15.7.6
 
 3. Run installer:
-./install_cpl_v2.sh
+./install_cpl.sh
 
 Installer Setup Workflow:
 
@@ -58,6 +58,10 @@ source ~/.zshrc
 
 cpl-study
 
+View study logs anytime with:
+
+cpl-log
+
 ------------------------------------------
 
 Runtime Configuration Files:
@@ -65,13 +69,22 @@ Runtime Configuration Files:
 The installer automatically creates:
 
 config/active_subjects.conf
-- Defines active subject ordering
+- Runtime subject ordering
 
 config/primary_subject_count.conf
-- Defines primary startup menu size
+- Main startup menu size
 
-These files may be edited manually later
-for personalized workflow adjustments.
+config/completed_subjects.conf
+- Completed-exam persistence
+
+config/hidden_subjects.conf
+- Visibility-state persistence
+
+config/timer_mode.conf
+- DEFAULT / SPEED pacing mode
+
+config/previous_study_minutes.conf
+- Integrated historical study totals
 
 ------------------------------------------
 

@@ -2,35 +2,70 @@
 
 # ====================================
 # CPL Study System
-# Version 14.3.2
-# Last Updated: 2026-05-10
+# Version 15.7.6
+# Last Updated: 2026-05-26
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
 # ====================================
 
-
 LOGDIR="$HOME/Documents/CPL/00_Admin/01_Execution/logs"
 LOGTXT="$LOGDIR/cpl_study_log.txt"
 LOGCSV="$LOGDIR/cpl_study_log.csv"
 
+SCRIPT_DIR="$(dirname "$0")"
+SUBJECT_DB="$SCRIPT_DIR/config/subjects.db"
+ACTIVE_SUBJECTS="$SCRIPT_DIR/config/active_subjects.conf"
+PRIMARY_COUNT_FILE="$SCRIPT_DIR/config/primary_subject_count.conf"
+COMPLETED_SUBJECTS="$SCRIPT_DIR/config/completed_subjects.conf"
+HIDDEN_SUBJECTS="$SCRIPT_DIR/config/hidden_subjects.conf"
+TIMER_MODE_FILE="$SCRIPT_DIR/config/timer_mode.conf"
+PREVIOUS_STUDY_FILE="$SCRIPT_DIR/config/previous_study_minutes.conf"
+
 trap 'tput cnorm; echo; echo "Session interrupted."; exit' INT
 
 mkdir -p "$LOGDIR"
+touch "$COMPLETED_SUBJECTS"
+touch "$HIDDEN_SUBJECTS"
+if [ ! -f "$TIMER_MODE_FILE" ]; then
+    echo "default" > "$TIMER_MODE_FILE"
+fi
+
+if [ ! -f "$PREVIOUS_STUDY_FILE" ]; then
+    echo "0" > "$PREVIOUS_STUDY_FILE"
+fi
 
 ########################################
 # CREATE CSV IF MISSING
 ########################################
 
-if [ ! -f "$LOGCSV" ]; then
-echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes" >> "$LOGCSV"
+if [ ! -f "$LOGCSV" ] || \
+   ! head -n 1 "$LOGCSV" | grep -q "^session,"; then
+
+echo "session,subject_session,date,subject,mode,questions,exam_max_minutes,exam_actual_minutes,score,confidence,mock_passed,session_minutes" > "$LOGCSV.tmp"
+
+if [ -f "$LOGCSV" ]; then
+cat "$LOGCSV" >> "$LOGCSV.tmp"
+fi
+
+mv "$LOGCSV.tmp" "$LOGCSV"
+
 fi
 
 ########################################
 # CONSTANTS
 ########################################
 
-TIME_PER_QUESTION=1.4
+TIMER_MODE=$(cat "$TIMER_MODE_FILE")
+if [ "$TIMER_MODE" = "speed" ]; then
+
+    TIME_PER_QUESTION=1.0
+
+else
+
+    TIME_PER_QUESTION=1.4
+
+fi
 
 DEFAULT_Q_FULL=35
 DEFAULT_Q_MOMENTUM=35
@@ -46,7 +81,11 @@ REVIEW_ENDURANCE_MIN=20
 EXTEND_MIN=5
 BAR_WIDTH=30
 
-########################################
+GREEN=$(tput setaf 2)
+NC=$(tput sgr0)
+CHECKMARK="${GREEN}✓${NC}"
+
+draw_header() {
 
 clear
 
@@ -55,16 +94,69 @@ echo "         CPL STUDY SESSION"
 echo "===================================="
 echo
 
+}
+
+########################################
+
+draw_header
+
+########################################
+# SUBJECT DISPLAY HELPER
+########################################
+
+display_subject() {
+
+DISPLAY_INDEX=$1
+DISPLAY_SUBJECT=$2
+
+if grep -Fxq "$DISPLAY_SUBJECT" "$HIDDEN_SUBJECTS"; then
+    return
+fi
+
+if grep -Fq "${DISPLAY_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
+
+    echo "${DISPLAY_INDEX}) ${CHECKMARK} ${DISPLAY_SUBJECT}"
+
+else
+
+    echo "${DISPLAY_INDEX}) ${DISPLAY_SUBJECT}"
+
+fi
+
+}
+
 ########################################
 # SUBJECT
 ########################################
 
+mapfile -t ACTIVE_LINES < "$ACTIVE_SUBJECTS"
+
+if [ -f "$PRIMARY_COUNT_FILE" ]; then
+    PRIMARY_SUBJECT_COUNT=$(cat "$PRIMARY_COUNT_FILE")
+else
+    PRIMARY_SUBJECT_COUNT=5
+fi
+
+TOTAL_SUBJECTS=${#ACTIVE_LINES[@]}
+
 echo "Select Subject:"
-echo "1) Meteorology"
-echo "2) Human Performance & Limitations"
-echo "3) General Navigation"
-echo "4) Communications"
-echo "5) Air Law"
+VISIBLE_INDEX=1
+VISIBLE_MAP=()
+for ((i=0; i<PRIMARY_SUBJECT_COUNT && i<TOTAL_SUBJECTS; i++)); do
+
+SUBJECT_NAME="${ACTIVE_LINES[$i]}"
+
+    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+
+    display_subject "$VISIBLE_INDEX" "$SUBJECT_NAME"
+
+    VISIBLE_MAP[VISIBLE_INDEX]=$i
+
+    VISIBLE_INDEX=$((VISIBLE_INDEX + 1))
+
+fi
+
+done
 
 echo
 echo "0) Show Additional Subjects"
@@ -72,52 +164,82 @@ echo "0) Show Additional Subjects"
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
+if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
+   [ -n "${VISIBLE_MAP[$SUBJECT_NUM]}" ]; then
+
+INDEX=${VISIBLE_MAP[$SUBJECT_NUM]}
+
+SUBJECT="${ACTIVE_LINES[$INDEX]}"
+
+fi
+
 case $SUBJECT_NUM in
-1) SUBJECT="Meteorology" ;;
-2) SUBJECT="Human Performance & Limitations" ;;
-3) SUBJECT="General Navigation" ;;
-4) SUBJECT="Communications" ;;
-5) SUBJECT="Air Law" ;;
+
+[1-9]|[1-9][0-9])
+
+if [ "$SUBJECT_NUM" -ge 1 ] && \
+   [ "$SUBJECT_NUM" -le "$PRIMARY_SUBJECT_COUNT" ]; then
+:
+else
+echo
+echo "Invalid selection."
+sleep 1
+exec "$0"
+fi
+;;
 
 0)
 
 echo
 echo "Additional Subjects:"
 echo
-echo "6) Principles of Flight"
-echo "7) Instrumentation"
-echo "8) Radio Navigation"
-echo "9) Airframe, Systems, Electrics, Power Plant"
-echo "10) Operational Procedures"
-echo "11) Mass & Balance"
-echo "12) Performance"
-echo "13) Flight Planning & Monitoring"
-echo "14) Knowledge, Skills and Attitudes (KSA)"
+VISIBLE_INDEX=$((PRIMARY_SUBJECT_COUNT + 1))
+VISIBLE_MAP=()
+for ((i=PRIMARY_SUBJECT_COUNT; i<TOTAL_SUBJECTS; i++)); do
+
+SUBJECT_NAME="${ACTIVE_LINES[$i]}"
+
+    if ! grep -Fxq "$SUBJECT_NAME" "$HIDDEN_SUBJECTS"; then
+
+    display_subject "$VISIBLE_INDEX" "$SUBJECT_NAME"
+
+    VISIBLE_MAP[VISIBLE_INDEX]=$i
+
+    VISIBLE_INDEX=$((VISIBLE_INDEX + 1))
+
+fi
+
+done
 
 echo
 echo "0) Back to Main Subjects"
-
 echo
 read -r -p "Enter number: " SUBJECT_NUM
 
-case $SUBJECT_NUM in
+if [ "$SUBJECT_NUM" = "0" ]; then
+    echo
+    echo "Returning to main subjects..."
+    sleep 1
+    exec "$0"
+fi
 
-0)
+if [[ "$SUBJECT_NUM" =~ ^[0-9]+$ ]] && \
+   [ -n "${VISIBLE_MAP[$SUBJECT_NUM]}" ]; then
+
+INDEX=${VISIBLE_MAP[$SUBJECT_NUM]}
+
+SUBJECT="${ACTIVE_LINES[$INDEX]}"
+
+else
+
 echo
-echo "Returning to main subjects..."
+echo "Invalid selection."
 sleep 1
 exec "$0"
-;;
 
-6) SUBJECT="Principles of Flight" ;;
-7) SUBJECT="Instrumentation" ;;
-8) SUBJECT="Radio Navigation" ;;
-9) SUBJECT="Airframe, Systems, Electrics, Power Plant" ;;
-10) SUBJECT="Operational Procedures" ;;
-11) SUBJECT="Mass & Balance" ;;
-12) SUBJECT="Performance" ;;
-13) SUBJECT="Flight Planning & Monitoring" ;;
-14) SUBJECT="Knowledge, Skills and Attitudes (KSA)" ;;
+fi
+
+;;
 
 *)
 echo
@@ -128,22 +250,12 @@ exec "$0"
 
 esac
 
-;;
-
-*) SUBJECT="Unknown" ;;
-
-esac
-
 echo
 echo "Selected: $SUBJECT"
 sleep 1
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo
 echo
@@ -173,12 +285,8 @@ echo
 echo "Selected Mode: $MODE_NAME"
 sleep 1
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo "Mode: $MODE_NAME"
 echo
@@ -205,12 +313,8 @@ sleep 1
 done
 echo
 
-clear
+draw_header
 
-echo "===================================="
-echo "         CPL STUDY SESSION"
-echo "===================================="
-echo
 echo "Subject: $SUBJECT"
 echo "Mode: $MODE_NAME"
 echo
@@ -234,7 +338,7 @@ PHASE=$2
 TOTAL_SECONDS=$((MINUTES * 60))
 SECONDS_LEFT=$TOTAL_SECONDS
 
-EXTENDED_MINUTES=0
+START_TIME=$(date +%s)
 
 echo
 echo "------------------------------------"
@@ -286,8 +390,6 @@ if [ "$KEY" = "e" ]; then
 SECONDS_LEFT=$((SECONDS_LEFT + EXTEND_MIN*60))
 TOTAL_SECONDS=$((TOTAL_SECONDS + EXTEND_MIN*60))
 
-EXTENDED_MINUTES=$((EXTENDED_MINUTES + EXTEND_MIN))
-
 echo
 echo "+${EXTEND_MIN} minutes added."
 
@@ -322,7 +424,11 @@ echo
 echo "$PHASE completed."
 echo
 
-RETURN_EXTENDED=$EXTENDED_MINUTES
+END_TIME=$(date +%s)
+
+ELAPSED_SECONDS=$((END_TIME - START_TIME))
+
+ACTUAL_TIMER_MIN=$(( (ELAPSED_SECONDS + 29) / 60 ))
 
 read -r -p "Press ENTER to continue..."
 
@@ -419,30 +525,32 @@ fi
 if [ "$MODE_NAME" = "momentum" ]; then
 
 run_timer $REVIEW_SHORT_MIN "Quick Review"
-REVIEW_EXTENDED=$RETURN_EXTENDED
 
-SESSION_MINUTES=$((EXAM_ACTUAL_MIN + REVIEW_SHORT_MIN + REVIEW_EXTENDED))
+SESSION_MINUTES=$((EXAM_ACTUAL_MIN + ACTUAL_TIMER_MIN))
 
 elif [ "$MODE_NAME" = "endurance" ]; then
 
 run_timer $REVIEW_ENDURANCE_MIN "Endurance Review"
-REVIEW_EXTENDED=$RETURN_EXTENDED
 
-SESSION_MINUTES=$((EXAM_ACTUAL_MIN + REVIEW_ENDURANCE_MIN + REVIEW_EXTENDED))
+SESSION_MINUTES=$((EXAM_ACTUAL_MIN + ACTUAL_TIMER_MIN))
 
 elif [ "$MODE_NAME" = "full" ]; then
 
 run_timer $REVIEW_MIN "Error Review"
-REVIEW_EXTENDED=$RETURN_EXTENDED
 
-SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + EXAM_ACTUAL_MIN + REVIEW_MIN + REVIEW_EXTENDED))
+SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + EXAM_ACTUAL_MIN + ACTUAL_TIMER_MIN))
+
+elif [ "$MODE_NAME" = "foundation" ]; then
+
+run_timer $REVIEW_MIN "Review New Insights"
+
+SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + ACTUAL_TIMER_MIN))
 
 else
 
-run_timer $REVIEW_MIN "Review New Insights"
-REVIEW_EXTENDED=$RETURN_EXTENDED
-
-SESSION_MINUTES=$((WARMUP_MIN + TARGET_MIN + REVIEW_MIN + REVIEW_EXTENDED))
+echo
+echo "Unknown session mode."
+exit 1
 
 fi
 
@@ -513,84 +621,21 @@ DATE=$(date "+%Y-%m-%d")
 # SUBJECT LOG PATH MAPPING
 ########################################
 
-case "$SUBJECT" in
+SUBJECT_ENTRY=$(grep "^${SUBJECT}|" "$SUBJECT_DB")
 
-"Meteorology")
-SUBJECT_DIR="$HOME/Documents/CPL/050_Meteorology"
-SUBJECT_CODE="met"
-;;
+if [ -n "$SUBJECT_ENTRY" ]; then
 
-"Human Performance & Limitations")
-SUBJECT_DIR="$HOME/Documents/CPL/040_Human_Performance_&_Limitations"
-SUBJECT_CODE="human"
-;;
+SUBJECT_FOLDER=$(echo "$SUBJECT_ENTRY" | cut -d'|' -f2)
+SUBJECT_CODE=$(echo "$SUBJECT_ENTRY" | cut -d'|' -f3)
 
-"General Navigation")
-SUBJECT_DIR="$HOME/Documents/CPL/061_General_Navigation"
-SUBJECT_CODE="gnav"
-;;
+SUBJECT_DIR="$HOME/Documents/CPL/$SUBJECT_FOLDER"
 
-"Communications")
-SUBJECT_DIR="$HOME/Documents/CPL/090_Communication"
-SUBJECT_CODE="com"
-;;
+else
 
-"Air Law")
-SUBJECT_DIR="$HOME/Documents/CPL/010_Air_Law"
-SUBJECT_CODE="alaw"
-;;
-
-"Principles of Flight")
-SUBJECT_DIR="$HOME/Documents/CPL/081_Principles_of_Flight"
-SUBJECT_CODE="pof"
-;;
-
-"Instrumentation")
-SUBJECT_DIR="$HOME/Documents/CPL/022_Instrumentation"
-SUBJECT_CODE="inst"
-;;
-
-"Radio Navigation")
-SUBJECT_DIR="$HOME/Documents/CPL/062_Radio_Navigation"
-SUBJECT_CODE="rnav"
-;;
-
-"Airframe, Systems, Electrics, Power Plant")
-SUBJECT_DIR="$HOME/Documents/CPL/021_Airframes"
-SUBJECT_CODE="asepp"
-;;
-
-"Operational Procedures")
-SUBJECT_DIR="$HOME/Documents/CPL/070_Operational_Procedures"
-SUBJECT_CODE="ops"
-;;
-
-"Mass & Balance")
-SUBJECT_DIR="$HOME/Documents/CPL/031_Mass_&_Balance"
-SUBJECT_CODE="mb"
-;;
-
-"Performance")
-SUBJECT_DIR="$HOME/Documents/CPL/032_Performance"
-SUBJECT_CODE="perf"
-;;
-
-"Flight Planning & Monitoring")
-SUBJECT_DIR="$HOME/Documents/CPL/033_Flight_Planning_&_Monitoring"
-SUBJECT_CODE="flpm"
-;;
-
-"Knowledge, Skills and Attitudes (KSA)")
-SUBJECT_DIR="$HOME/Documents/CPL/100_KSA"
-SUBJECT_CODE="ksa"
-;;
-
-*)
 SUBJECT_DIR=""
 SUBJECT_CODE="unknown"
-;;
 
-esac
+fi
 
 SUBJECT_LOG_TXT="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.txt"
 SUBJECT_LOG_CSV="$SUBJECT_DIR/${SUBJECT_CODE}_study_log.csv"
@@ -627,6 +672,7 @@ END {print count+1}
 # TOTALS
 ########################################
 
+PREVIOUS_STUDY_MINUTES=$(cat "$PREVIOUS_STUDY_FILE")
 TOTAL_MINUTES=$(awk -F',' '
 NR>1 {
 if ($NF ~ /^[0-9]+$/)
@@ -643,7 +689,7 @@ sum+=$NF
 END {print sum}
 ' "$LOGCSV")
 
-NEW_TOTAL=$((TOTAL_MINUTES + SESSION_MINUTES))
+NEW_TOTAL=$((TOTAL_MINUTES + PREVIOUS_STUDY_MINUTES + SESSION_MINUTES))
 NEW_SUBJECT_TOTAL=$((SUBJECT_TOTAL_MINUTES + SESSION_MINUTES))
 
 ########################################
@@ -770,6 +816,12 @@ echo
 
 tput cnorm
 
+read -r -p "Press ENTER to continue..."
+
+while true; do
+
+draw_header
+
 ########################################
 # POST-SESSION OPTIONS
 ########################################
@@ -777,12 +829,14 @@ tput cnorm
 echo
 echo "What would you like to do?"
 echo
-echo "r) Return to main menu"
-echo "l) View latest log entry"
+echo "r) Return to Main Menu"
+echo "c) Change Settings"
+echo "l) View Latest Log Entry"
+echo "e) Log Completed Exam Subjects"
 echo "q) Quit"
 echo
 
-read -r -n 1 -p "Selection: " FINAL_CHOICE
+read -r -p "Selection: " FINAL_CHOICE
 echo
 
 case "$FINAL_CHOICE" in
@@ -791,9 +845,680 @@ r)
 exec "$0"
 ;;
 
+c)
+while true; do
+
+draw_header
+echo
+echo "--- Settings Menu ---"
+echo
+echo "1) Change Focus Subjects"
+echo "2) Change Timer Settings"
+echo "3) Log Maintenance"
+echo "4) Return to Post-Session Menu"
+echo
+read -r -p "Enter selection: " SETTINGS_CHOICE
+case "$SETTINGS_CHOICE" in
+
+1)
+
+while true; do
+
+draw_header
+echo
+echo "--- Change Focus Subjects ---"
+echo
+
+echo "Current Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    SUBJECT_NAME="${ACTIVE_LINES[$i]}"
+
+    display_subject "$((i + 1))" "$SUBJECT_NAME"
+
+done
+
+echo
+echo "Enter subjects in desired focus order."
+echo
+echo "Example:"
+echo "1 3 5 7"
+echo
+echo "The number of selected subjects defines"
+echo "the primary startup menu size."
+echo
+echo "d = Restore Default Subject Order"
+echo
+
+read -r -p "Enter focus subjects: " NEW_FOCUS
+
+if [[ "$NEW_FOCUS" == "d" ]]; then
+
+    cp "$SUBJECT_DB" "$ACTIVE_SUBJECTS"
+
+    echo "5" > "$PRIMARY_COUNT_FILE"
+
+    echo
+    echo "Default subject order restored."
+    echo
+
+    read -r -p "Press ENTER to continue..."
+
+    break 2
+
+fi
+
+read -ra FOCUS_ARRAY <<< "$NEW_FOCUS"
+
+NEW_ACTIVE=()
+REMAINING=()
+USED_NUMBERS=()
+
+for NUM in "${FOCUS_ARRAY[@]}"; do
+
+if [[ ! "$NUM" =~ ^[0-9]+$ ]]; then
+    continue
+fi
+
+DUPLICATE=0
+
+for USED in "${USED_NUMBERS[@]}"; do
+
+    if [ "$NUM" = "$USED" ]; then
+        DUPLICATE=1
+        break
+    fi
+
+done
+
+if [ "$DUPLICATE" -eq 1 ]; then
+    continue
+fi
+
+INDEX=$((NUM - 1))
+
+if [ "$INDEX" -ge 0 ] && \
+   [ "$INDEX" -lt "$TOTAL_SUBJECTS" ]; then
+
+    NEW_ACTIVE+=("${ACTIVE_LINES[$INDEX]}")
+    USED_NUMBERS+=("$NUM")
+
+fi
+
+done
+
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
+
+FOUND=0
+
+for SELECTED in "${NEW_ACTIVE[@]}"; do
+
+    if [ "$SUBJECT_NAME" = "$SELECTED" ]; then
+        FOUND=1
+        break
+    fi
+
+done
+
+if [ "$FOUND" -eq 0 ]; then
+    REMAINING+=("$SUBJECT_NAME")
+fi
+
+done
+
+if [ "${#NEW_ACTIVE[@]}" -eq 0 ]; then
+
+    draw_header
+
+    while true; do
+
+        echo
+        echo "No subjects selected."
+        echo
+	echo "1) Reconsider Subject Selection"
+	echo "2) Return to Settings Menu"
+	echo "3) Return to Post-Session Menu"
+        echo
+
+        read -r -p "Enter selection: " EMPTY_SELECTION_CHOICE
+
+        case "$EMPTY_SELECTION_CHOICE" in
+
+        1)
+
+            break
+            ;;
+
+        2)
+
+            break 2
+            ;;
+
+        3)
+
+            break 3
+            ;;
+
+        *)
+
+            echo
+            echo "Invalid selection."
+            ;;
+
+        esac
+
+    done
+
+    continue
+
+fi
+
+FINAL_ACTIVE=("${NEW_ACTIVE[@]}" "${REMAINING[@]}")
+
+echo
+echo "New Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    display_subject "$((i + 1))" "${FINAL_ACTIVE[$i]}"
+
+done
+echo
+
+echo
+read -r -p "Confirm New Subject Priority? (y/n): " CONFIRM_SUBJECTS
+
+if [ "$CONFIRM_SUBJECTS" = "y" ]; then
+
+    printf "%s\n" "${FINAL_ACTIVE[@]}" > "$ACTIVE_SUBJECTS"
+
+    echo "${#NEW_ACTIVE[@]}" > "$PRIMARY_COUNT_FILE"
+
+    echo
+    echo "Focus subjects updated successfully."
+    echo
+    echo "Primary startup menu now displays:"
+    echo "${#NEW_ACTIVE[@]} subjects."
+    echo
+
+    read -r -p "Press ENTER to continue..."
+
+    break 2
+
+else
+
+    draw_header
+
+    while true; do
+
+        echo
+        echo "Changes discarded."
+        echo
+        echo "1) Reconsider Subject Selection"
+        echo "2) Return to Settings Menu"
+	echo "3) Return to Post-Session Menu"
+        echo
+
+        read -r -p "Enter selection: " REJECT_CHOICE
+
+        case "$REJECT_CHOICE" in
+
+        1)
+
+            break
+            ;;
+
+        2)
+
+            break 2
+            ;;
+
+        3)
+
+            break 3
+            ;;
+
+        *)
+
+            echo
+            echo "Invalid selection."
+            ;;
+
+        esac
+
+    done
+
+    continue
+
+fi
+
+done
+
+;; 
+
+2)
+
+while true; do
+
+    draw_header
+
+    echo
+    echo "--- Timer Settings ---"
+    echo
+
+    CURRENT_TIMER_MODE=$(cat "$TIMER_MODE_FILE")
+
+    echo "Current Timer Mode: ${CURRENT_TIMER_MODE^^}"
+    echo
+    echo "1) DEFAULT"
+    echo "2) SPEED"
+    echo "3) Return to Post-Session Menu"
+    echo
+
+    read -r -p "Enter selection: " TIMER_CHOICE
+
+    case "$TIMER_CHOICE" in
+
+    1)
+
+        echo "default" > "$TIMER_MODE_FILE"
+
+        echo
+        echo "Timer mode set to DEFAULT."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        
+	break
+	;;
+
+    2)
+
+        echo "speed" > "$TIMER_MODE_FILE"
+
+        echo
+        echo "Timer mode set to SPEED."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        
+	break
+	;;
+
+    3)
+
+        break 2
+        ;;
+
+    *)
+
+        echo
+        echo "Invalid selection."
+        ;;
+    esac
+
+done
+;;
+
+3)
+
+while true; do
+
+    draw_header
+
+    echo
+    echo "--- Log Maintenance ---"
+    echo
+
+    CURRENT_PREVIOUS_MINUTES=$(cat "$PREVIOUS_STUDY_FILE")
+
+    CURRENT_HOURS=$((CURRENT_PREVIOUS_MINUTES / 60))
+    CURRENT_MINUTES=$((CURRENT_PREVIOUS_MINUTES % 60))
+
+    echo "Previously Integrated Study Time:"
+    echo "${CURRENT_HOURS}h ${CURRENT_MINUTES}m"
+    echo
+    echo "1) Add Previous Study Time"
+    echo "2) Reset Previous Study Time"
+    echo "3) Return to Post-Session Menu"
+    echo
+
+    read -r -p "Enter selection: " LOG_CHOICE
+
+    case "$LOG_CHOICE" in
+
+    1)
+
+        echo
+	read -r -p "Enter previous study time (hh:mm): " PREV_TIME
+
+	if [[ "$PREV_TIME" =~ ^([0-9]+):([0-5][0-9])$ ]]; then
+
+	    HOURS="${BASH_REMATCH[1]}"
+	    MINUTES="${BASH_REMATCH[2]}"
+
+	    PREV_MINUTES=$((10#$HOURS * 60 + 10#$MINUTES))
+
+            echo "$PREV_MINUTES" > "$PREVIOUS_STUDY_FILE"
+
+            echo
+            echo "Previous study time updated successfully."
+            echo
+
+        else
+
+            echo
+            echo "Invalid input."
+            echo
+
+        fi
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    2)
+
+        echo "0" > "$PREVIOUS_STUDY_FILE"
+
+        echo
+        echo "Previous study time reset successfully."
+        echo
+
+        read -r -p "Press ENTER to continue..."
+        ;;
+
+    3)
+
+        break 2
+        ;;
+
+    *)
+
+        echo
+        echo "Invalid selection."
+        ;;
+    esac
+
+done
+;;
+
+4)
+
+    break
+    ;;
+
+*)
+
+echo
+echo "Invalid selection."
+sleep 1
+;;
+
+esac
+
+done
+
+;;
+
 l)
 less "$LOGTXT"
+;;
+
+e)
+
+draw_header
+
+echo
+echo "===================================="
+echo "    COMPLETED EXAM SUBJECTS"
+echo "===================================="
+echo
+
+NEW_COMPLETIONS=()
+
+while true; do
+
+draw_header
+
+echo
+echo "===================================="
+echo "    COMPLETED EXAM SUBJECTS"
+echo "===================================="
+echo
+
+echo "Current Active Subjects:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+    display_subject "$((i + 1))" "${ACTIVE_LINES[$i]}"
+done
+
+echo
+read -r -p "Enter completed subject number: " COMPLETE_NUM
+
+if [[ ! "$COMPLETE_NUM" =~ ^[0-9]+$ ]]; then
+    echo
+    echo "Invalid selection."
+    echo
+    continue
+fi
+
+INDEX=$((COMPLETE_NUM - 1))
+
+if [ "$INDEX" -lt 0 ] || \
+   [ "$INDEX" -ge "$TOTAL_SUBJECTS" ]; then
+
+    echo
+    echo "Invalid selection."
+    echo
+    continue
+
+fi
+
+COMPLETED_SUBJECT="${ACTIVE_LINES[$INDEX]}"
+
+if grep -Fq "${COMPLETED_SUBJECT}|" "$COMPLETED_SUBJECTS"; then
+
+    echo
+    echo "$COMPLETED_SUBJECT already logged as completed."
+    echo
+    continue
+
+fi
+
+echo
+read -r -p "Enter final score achieved: " FINAL_SCORE
+
+if [[ ! "$FINAL_SCORE" =~ ^[0-9]+$ ]] || \
+   [ "$FINAL_SCORE" -lt 75 ] || \
+   [ "$FINAL_SCORE" -gt 100 ]; then
+
+    echo
+    echo "Score must be between 75 and 100."
+    echo
+    continue
+
+fi
+
+echo "${COMPLETED_SUBJECT}|${FINAL_SCORE}" >> "$COMPLETED_SUBJECTS"
+
+NEW_COMPLETIONS+=("${COMPLETED_SUBJECT}|${FINAL_SCORE}")
+
+echo
+echo "$COMPLETED_SUBJECT recorded successfully."
+echo
+
+read -r -p "Add another completed subject? (y/n): " ADD_ANOTHER
+
+[ "$ADD_ANOTHER" != "y" ] && break
+
+done
+
+TOTAL_COMPLETED=$(wc -l < "$COMPLETED_SUBJECTS")
+
+REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
+
+if [ "$REMAINING_EXAMS" -eq 0 ]; then
+
+    clear
+
+    echo
+    echo "===================================="
+    echo "     ALL EXAMS COMPLETED"
+    echo "===================================="
+    echo
+    echo "Congratulations on passing"
+    echo "all EASA CPL exams."
+    echo
+    echo "Thank you for using this CLI"
+    echo "developed by c7alex359."
+    echo
+    echo "If this tool helped you achieve"
+    echo "this milestone,"
+    echo "consider sharing it with others:"
+    echo "https://github.com/c7alex359/CPL-Study-System"
+    echo
+    echo "The skies welcome you fully."
+    echo "May their blessings be with you always. So long!"
+    echo
+
+    read -r -p "Press ENTER to close the system..."
+
+    exit
+
+fi
+
+draw_header
+
+echo
+echo "===================================="
+echo "         CONGRATULATIONS"
+echo "===================================="
+echo
+echo "You passed:"
+echo
+
+for ((i=0; i<${#NEW_COMPLETIONS[@]}; i++)); do
+
+    ENTRY="${NEW_COMPLETIONS[$i]}"
+
+    SUBJECT_NAME=$(echo "$ENTRY" | cut -d'|' -f1)
+    SUBJECT_SCORE=$(echo "$ENTRY" | cut -d'|' -f2)
+
+    echo "$((i + 1))) ${CHECKMARK} ${SUBJECT_NAME} @ ${SUBJECT_SCORE}%"
+
+done
+
+echo
+echo "You now have only ${REMAINING_EXAMS} exams left."
+echo
+
+echo "What would you like to do?"
+echo
+echo "1) Keep Completed Subjects Visible"
+echo "2) Move Completed Subjects to Bottom"
+echo "3) Hide Completed Subjects"
+echo
+
+read -r -p "Enter selection: " VISIBILITY_CHOICE
+
+case "$VISIBILITY_CHOICE" in
+
+1)
+
+: > "$HIDDEN_SUBJECTS"
+
+echo
+echo "Completed subjects will remain visible."
+echo
+
+read -r -p "Press ENTER to continue..."
+;;
+
+2)
+
+: > "$HIDDEN_SUBJECTS"
+
+VISIBLE_SUBJECTS=()
+COMPLETED_LIST=()
+
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
+
+    if grep -Fq "${SUBJECT_NAME}|" "$COMPLETED_SUBJECTS"; then
+
+        COMPLETED_LIST+=("$SUBJECT_NAME")
+
+    else
+
+        VISIBLE_SUBJECTS+=("$SUBJECT_NAME")
+
+    fi
+
+done
+
+FINAL_ACTIVE=("${VISIBLE_SUBJECTS[@]}" "${COMPLETED_LIST[@]}")
+
+echo
+echo "New Subject Priority:"
+echo
+
+for ((i=0; i<TOTAL_SUBJECTS; i++)); do
+
+    display_subject "$((i + 1))" "${FINAL_ACTIVE[$i]}"
+
+done
+
+echo
+
+read -r -p "Confirm New Visibility Order? (y/n): " CONFIRM_MOVE
+
+if [ "$CONFIRM_MOVE" = "y" ]; then
+
+    printf "%s\n" "${FINAL_ACTIVE[@]}" > "$ACTIVE_SUBJECTS"
+
+    echo
+    echo "Completed subjects moved successfully."
+    echo
+
+else
+
+    echo
+    echo "Changes discarded."
+    echo
+
+fi
+
+read -r -p "Press ENTER to continue..."
+;;
+
+3)
+
+: > "$HIDDEN_SUBJECTS"
+
+for SUBJECT_NAME in "${ACTIVE_LINES[@]}"; do
+
+    if grep -Fq "${SUBJECT_NAME}|" "$COMPLETED_SUBJECTS"; then
+
+        echo "$SUBJECT_NAME" >> "$HIDDEN_SUBJECTS"
+
+    fi
+
+done
+
+echo
+echo "Completed subjects hidden successfully."
+echo
+
+read -r -p "Press ENTER to continue..."
+;;
+
+*)
 exec "$0"
+;;
+esac
 ;;
 
 q)
@@ -803,7 +1528,12 @@ exit
 ;;
 
 *)
-exec "$0"
+
+echo
+echo "Invalid selection."
+sleep 1
 ;;
 
 esac
+
+done

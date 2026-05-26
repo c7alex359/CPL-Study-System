@@ -2,7 +2,7 @@
 
 # ==========================================
 # CPL Study System Installer
-# Version 2.2
+# Version 2.3
 # Linux + macOS Compatible
 #
 # Created by: c7alex359
@@ -11,7 +11,7 @@
 
 echo
 echo "=========================================="
-echo "     CPL STUDY SYSTEM INSTALLER v2.2"
+echo "     CPL STUDY SYSTEM INSTALLER v2.3"
 echo "=========================================="
 echo
 
@@ -105,11 +105,11 @@ mkdir -p "$ROOT/100_KSA"
 echo
 echo "Installing CPL Study script..."
 
-cp cpl_study_v15.sh "$BASE/"
+cp cpl_study.sh "$BASE/"
 cp config/subjects.db "$BASE/config/"
 mapfile -t SUBJECT_LINES < "$BASE/config/subjects.db"
 
-chmod +x "$BASE/cpl_study_v15.sh"
+chmod +x "$BASE/cpl_study.sh"
 
 ########################################
 # Create logs if missing
@@ -120,20 +120,33 @@ echo "Creating log files..."
 
 touch "$LOGDIR/cpl_study_log.txt"
 touch "$LOGDIR/cpl_study_log.csv"
+touch "$BASE/config/completed_subjects.conf"
+touch "$BASE/config/hidden_subjects.conf"
+
+echo "default" > "$BASE/config/timer_mode.conf"
+echo "0" > "$BASE/config/previous_study_minutes.conf"
 
 ########################################
 # Add alias
 ########################################
 
-ALIAS_LINE="alias cpl-study='$BASE/cpl_study_v15.sh'"
+ALIAS_LINE="alias cpl-study='$BASE/cpl_study.sh'"
+LOG_ALIAS_LINE="alias cpl-log='less $LOGDIR/cpl_study_log.txt'"
 
 # Remove old CPL alias if present
-sed -i '/alias cpl-study=/d' "$SHELL_CONFIG"
+if [ "$OS_TYPE" = "Darwin" ]; then
+    sed -i '' '/alias cpl-study=/d' "$SHELL_CONFIG"
+    sed -i '' '/alias cpl-log=/d' "$SHELL_CONFIG"
+else
+    sed -i '/alias cpl-study=/d' "$SHELL_CONFIG"
+    sed -i '/alias cpl-log=/d' "$SHELL_CONFIG"
+fi
 
 # Add fresh alias
 echo "$ALIAS_LINE" >> "$SHELL_CONFIG"
+echo "$LOG_ALIAS_LINE" >> "$SHELL_CONFIG"
 
-echo "Alias updated in $SHELL_CONFIG"
+echo "Aliases updated in $SHELL_CONFIG"
 
 ########################################
 # Interactive Focus Selection
@@ -144,7 +157,7 @@ echo "=========================================="
 echo " SUBJECT PRIORITIZATION SETUP"
 echo "=========================================="
 echo
-echo "Select up to 5 focus subjects."
+echo "Select focus subjects in desired startup order."
 echo "These will appear in the main startup menu."
 echo
 
@@ -222,4 +235,8 @@ echo
 echo "Then start the system with:"
 echo
 echo "cpl-study"
+echo
+echo "View study logs anytime with:"
+echo
+echo "cpl-log"
 echo

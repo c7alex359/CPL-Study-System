@@ -7,10 +7,10 @@ Created by:
 c7alex359
 
 Current Stable Release:
-v14.3.2
+v15.7.6
 
 Current Development Version:
-v15.7.4-dev
+v16.x-dev
 
 ==================================================
 
@@ -312,15 +312,15 @@ Quick Start
 
 1. Extract package:
 
-tar -xzf CPL_Study_System_v15.tar.gz
+tar -xzf CPL_Study_System_v15.7.6.tar.gz
 
 2. Enter directory:
 
-cd CPL_Study_System
+cd CPL_Study_System_v15.7.6
 
 3. Run installer:
 
-./install_cpl_v2.sh
+./install_cpl.sh
 
 4. Reload shell configuration.
 
@@ -338,21 +338,28 @@ source ~/.zshrc
 
 cpl-study
 
+View study logs anytime with:
+
+cpl-log
+
 ==================================================
 
 System Status
 
-Current Development Branch:
-v15.7.4-dev
+Stable Release:
+v15.7.6
 
 Status:
 
 Operationally stable and runtime validated
 through live multi-session execution.
 
-This version represents the mature
-pre-architectural-split generation
-of the CPL Study System.
+Version 15.7.6 represents the mature
+pre-modularization generation of the
+CPL Study System.
+
+Current Development Branch:
+v16.x-dev
 
 ==================================================
 
