@@ -11,7 +11,7 @@ v14.3.2
 
 ==================================================
 Version 15.7.6-dev
-2026-05-26
+2026-05-28
 ==================================================
 
 - Added canonical subject-order restoration workflow
@@ -26,6 +26,10 @@ Version 15.7.6-dev
 - Reduced navigation ambiguity during runtime configuration
 
 - Refined timer-settings operational continuity
+- Hardened final completion-state activation logic
+- Refined all-exams-completed detection semantics
+- Improved resilience against duplicate progression entries
+  during runtime validation workflows
 - Preserved stable submenu behavior while reducing
   user-navigation uncertainty after timer changes
 
@@ -45,9 +49,10 @@ operational ordering state.
 Operational Status:
 
 Runtime validated — canonical subject restoration,
-timer configuration continuity, progression-state
-preservation, and post-session navigation behavior
-verified during live execution testing.
+progression culmination handling, timer configuration
+continuity, progression-state preservation, and
+post-session navigation behavior verified during
+live execution testing.
 
 ==================================================
 Version 15.7.5-dev
