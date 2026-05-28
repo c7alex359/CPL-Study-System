@@ -15,6 +15,7 @@ Evolution/*
 # Images
 *.jpg
 *.png
+!screenshots/*.png
 
 # Temporary files
 /tmp/

@@ -28,6 +28,8 @@ The system is designed as a lightweight,
 terminal-native operational study environment
 for long-term structured learning.
 
+![Momentum Mode](screenshots/momentum-mode-v15.png)
+
 Concept:
 
 The CPL Study System is designed to work
@@ -70,6 +72,8 @@ Core Workflow:
    - Primary or Additional Subjects
    - Persistent progression visibility
    - Completed-subject tracking
+
+![Subject Selection Workflow](screenshots/main-menu-v15.png)
 
 2. Select session mode
    - Full Session
@@ -115,6 +119,8 @@ Features:
 The system supports long-term progression
 through the full CPL syllabus.
 
+![Persistent Subject Progression](screenshots/subject-completion-v15.png)
+
 ==================================================
 
 Operational Workflow
@@ -134,6 +140,8 @@ After each session users may:
 This architecture allows uninterrupted
 runtime continuity without restarting
 the operational environment.
+
+![Post-Session Operational Hub](screenshots/post-session-menu.png)
 
 ==================================================
 
@@ -188,6 +196,8 @@ SPEED
 
 Timer configuration persists automatically
 across sessions.
+
+![Timer Settings](screenshots/timer-settings-v15.png)
 
 ==================================================
 
@@ -281,30 +291,6 @@ Quality Assurance
 - Runtime configuration system validated
 - Multi-session progression workflows tested
 - Distribution deployment verified
-
-==================================================
-
-Screenshots
-
-### Persistent Subject Progression
-
-[ Screenshot Placeholder ]
-
-### Post-Session Operational Hub
-
-[ Screenshot Placeholder ]
-
-### Timer Environment
-
-[ Screenshot Placeholder ]
-
-### Settings System
-
-[ Screenshot Placeholder ]
-
-### Final Completion State
-
-[ Screenshot Placeholder ]
 
 ==================================================
 

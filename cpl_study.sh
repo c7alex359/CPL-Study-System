@@ -3,7 +3,7 @@
 # ====================================
 # CPL Study System
 # Version 15.7.6
-# Last Updated: 2026-05-26
+# Last Updated: 2026-05-28
 #
 # Created by: c7alex359
 # Licensed under GNU GPL v3.0
@@ -1357,7 +1357,9 @@ read -r -p "Add another completed subject? (y/n): " ADD_ANOTHER
 
 done
 
-TOTAL_COMPLETED=$(wc -l < "$COMPLETED_SUBJECTS")
+TOTAL_COMPLETED=$(cut -d'|' -f1 "$COMPLETED_SUBJECTS" \
+| sort -u \
+| grep -c .)
 
 REMAINING_EXAMS=$((TOTAL_SUBJECTS - TOTAL_COMPLETED))
 
