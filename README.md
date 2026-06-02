@@ -292,6 +292,13 @@ Quality Assurance
 - Multi-session progression workflows tested
 - Distribution deployment verified
 
+Development and release validation includes:
+
+- ShellCheck static analysis
+- Clean-install deployment testing
+- Runtime workflow validation
+- Live study-session verification
+
 ==================================================
 
 Quick Start
